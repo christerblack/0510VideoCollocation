@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Testing Video with pure html and css to control subtitles</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+        <link rel="shortcut icon" href="assets/images/favicon.ico">
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css" />
+        <link rel="stylesheet" href="/styles.css" crossorigin="anonymous" />
+        <link rel="shortcut icon" href="#" />
+       
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
+            integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
+            crossorigin="anonymous"></script>
+        
+        <!-- <script type="module" src="./videosrt.js" crossorigin="anonymous"></script> -->
+        <script type="module" defer="defer" src="/init-firebase.js"></script>
+        <script type="module" async="async" src="/drag.js" crossorigin="anonymous"></script>
+        <script type="module" async="async" src="/crud.js" crossorigin="anonymous"></script>
+        <script type="module" src="/storage.js" crossorigin="anonymous"></script>
+        <script type="module" src="/modal.js" crossorigin="anonymous"></script>
+        <script type="module" async="async" src="/filter.js" crossorigin="anonymous"></script>
+        <script src="/videosub-0.9.9.js" crossorigin="anonymous"></script>
+    
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+            }
+    
+            .container {
+                display: flex;
+                flex-direction: row;
+                flex-flow: wrap;
+            }
+    
+            .collocation-wrapper {
+                margin: 10px 20px;
+                flex: 0.7;
+                min-width: 200px;
+                min-height: 300px;
+                width: 250px;
+                height: auto;
+                border: 2px solid black;
+            }
+    
+            body {
+                /* Prevent the user selecting text in the example */
+                width: auto;
+                height: auto;
+            }
+    
+            nav {
+                display: flex;
+                justify-content: center;
+                margin: auto;
+                width: fit-content;
+                padding: 10px 10px;
+                align-items: center;
+            }
+    
+            .dropzone {
+                width: auto;
+                height: auto;
+                margin: 10px;
+                padding: 10px;
+            }
+    
+            p {
+                flex: 1.7;
+                text-align: left;
+                margin-left: 10px;
+                color: black;
+                font-family: Helvetica, Arial, sans-serif;
+                font-size: 20px;
+                font-weight: bold;
+            }
+    
+            .create-content {
+                display: flex;
+                flex-direction: row;
+                margin: 10px 0px;
+            }
+    
+            footer {
+                margin: 15px 0px;
+            }
+    
+            a {
+                font-size: 20px;
+            }
+    
+            i {
+               margin-left: 3px; 
+            }
+    
+            span {
+                flex: 0.7;
+            }
+    
+            label {
+                margin-right: 10px;
+            }
+    
+            .dropzone.dragover {
+                background-color: purple;
+            }
+    
+            .usernameHomepage {
+                text-align: center;
+                margin: 2px 20px;
+            }
+    
+    
+            .search-container {
+                float: right;
+            }
+    
+            .topnav input[type=text] {
+                padding: 6px;
+                margin-top: 8px;
+                font-size: 17px;
+                border: none;
+            }
+    
+            .search-container form {
+                margin: 5px 10px;
+            }
+    
+            .search-container button {
+                display: contents;
+                padding: 6px 10px;
+                height: 38px;
+                font-size: 17px;
+                border: none;
+                cursor: pointer;
+                margin: 15px 25px;
+            }
+    
+            .search-container button:hover {
+                background: #ccc;
+            }
+    
+            @media screen and (max-width: 600px) {
+                .search-container {
+                    float: none;
+                }
+    
+                .topnav input[type=text],
+                .search-container button {
+                    float: none;
+                    display: block;
+                    text-align: left;
+                    width: 100%;
+                    margin: 0;
+                    padding: 14px;
+                    text-decoration: none;
+                    font-size: 18px;
+                }
+    
+                .topnav input[type=text] {
+                    border: 1px solid #ccc;
+                }
+            }
+    
+            #corpus{
+                margin:25px 10px 0px 30px;
+                text-decoration:underline;
+            }
+    
+    
+            .button {
+                background-color: white;
+                border: solid 0.2rem;
+                border-color: grey;
+                color: black;
+                padding: 10px 10px;
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+                font-size: 18px;
+                margin: 4px 2px;
+                cursor: pointer;
+                border-radius: 12px;
+            }
+    
+            .SearchingInput {
+                display: flex;
+            }
+    
+            .buttonvideo{
+                margin:auto;
+                padding:10px 10px;
+                width: fit-content;
+                border: solid 0.2rem;
+                border-color: grey;
+                cursor: pointer;
+                border-radius: 12px;
+            }
+    
+        </style>
+    </head>
+
+    <body>
+        <nav>
+            <p class="usernameHomepage" id="googleUserName"></p>
+            <a class="button" href="chat.html">Collocation Review Board</a>
+            <button type="button" class="google-signin" id="google-sign-out">Sign Out with Google</button>
+        </nav>
+    
+        <div class="container">
+            <button class="buttonvideo" id="button1" onclick=loadVideoandsrt(this) data-video="1_1.mp4" datasrt="0101.srt">Video Ep1</button>
+            <button class="buttonvideo" id="button2" onclick=loadVideoandsrt(this) data-video="1_2.mp4" datasrt="0102.srt">Video Ep2</button>
+            <button class="buttonvideo" id="button3" onclick=loadVideoandsrt(this) data-video="1_3.mp4" datasrt="0103.srt">Video Ep3</button>
+            <button class="buttonvideo" id="button4" onclick=loadVideoandsrt(this) data-video="1_4.mp4" datasrt="0104.srt">Video Ep4</button>
+            <button class="buttonvideo" id="button5" onclick=loadVideoandsrt(this) data-video="1_5.mp4" datasrt="0105.srt">Video Ep5</button>
+             
+        </div>
+    
+        <div class="container" id="video_container">
+            <video controls src="" width="100%" id="video1" >
+                <track src="0101.srt" default kind="subtitle" srclang="en" label="English" id="srtSrc1">
+                Your browser does not support HTML5 video.
+            </video>
+    
+            <div class="collocation-wrapper">
+                <h1 style="padding-left: 10px">Vocabulary Collocation List</h1>
+                <div class="dropzone" id="dict">
+                    <br />
+                </div>
+            </div>
+    
+            <div class="modal fade" tabindex="-1" id="exampleModal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Modal title</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                                onclick="closeModal('exampleModal')"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p></p>
+                            <p></p>
+                            <hr>
+                            <div class="SearchingInput">
+                                <div class="search-container">
+                                    <!--Free Collocation.com site  action="/handleSearchForm.js-->
+                                    <h5>Free Collocation</h5>
+                                    <input id="freeCollocatiom" type="text" placeholder="只限一个单字查询.." name="CollocationSearch">
+                                    <button id="search1" type="submit"><i class="fa fa-search"></i></button>
+    
+                                </div>
+                                <div class="search-container" id=corpus>
+                                    <!--Corpus site-->
+                                    <button id="search2">BNC English Corpora<i class="fa fa-search"></i></button>                           
+                                   
+                                </div>
+                            </div>
+                            <br>
+                            <div class="card-body">
+                                <div class="row m-0">
+                                    <div class="col-12 p-0">
+                                        <div class="input-group mt-2">
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="inlineRadioOptions"
+                                                    id="Verb-Adv" value="Verb + Noun" />
+                                                <label class="form-check-label" for="Verb-Adv">Verb + Noun</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="inlineRadioOptions"
+                                                    id="Verb-Verb" value="Verb + Prep" />
+                                                <label class="form-check-label" for="Verb-Verb">Verb + Preposition</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="inlineRadioOptions"
+                                                    id="Noun-Verb" value="Verb + Adv" />
+                                                <label class="form-check-label" for="Noun-Verb">Verb + Adverb</label>
+                                            </div>
+                                        </div>
+                                    </div>
+    
+                                    <div class="col-12 p-0">
+                                        <span class="text-dark-emphasis me-3">Translate</span>
+                                        <div class="input-group mt-2">
+                                            <input type="text" class="form-control" placeholder="translate"
+                                                aria-label="translate" id="translate" />
+                                        </div>
+                                    </div>
+                                    <div class="col-12 p-0">
+                                        <span class="text-dark-emphasis me-3">Give an example</span>
+                                        <div class="input-group mt-2">
+                                            <input type="text" class="form-control" placeholder="Give an example"
+                                                aria-label="Give an example" id="give-an-example" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+    
+                        </div>
+    
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary"
+                                onclick="closeModal('exampleModal')">Close</button>
+                            <button type="button" class="btn btn-primary" onclick="submitModal('exampleModal')">Submit
+                                and Share</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <!--           <p>Google Credential :</p>
+               <p id="googleCredential"></p>
+    
+               <br>
+    
+               <p>Firebase Token :</p>
+               <p id="googleToken"></p>
+    
+               <br>
+    
+               <p>Google User :</p>
+               <p id="googleUser"></p>
+    -->
+        <script type="text/javascript">
+            const link = document.getElementById("freeCollocatiom"); 
+            const button = document.getElementById("search1");
+            button.addEventListener("click", event => {
+                const value1 = link?.value || "";
+                const url = "https://www.freecollocation.com/search?word=" + value1;
+             //   console.log("before" + url);
+                decodeURI(url);
+             //   console.log("After" + url);
+    
+                window.open(url);
+            });
+    
+            const button2 = document.getElementById("search2");
+            button2.addEventListener("click", event => {
+                const urlCorpus = "https://www.english-corpora.org/bnc/";
+                window.open(urlCorpus);
+            });
+        </script>
+    
+        <script>
+    
+            function homeInit() {
+                const credential = localStorage.getItem("googleCredential");
+                const token = localStorage.getItem("googleToken");
+                const user = localStorage.getItem("googleUser");
+    
+                //document.querySelector("#googleCredential").textContent = JSON.stringify(JSON.parse(credential), undefined, 4);
+                //document.querySelector("#googleToken").textContent = token;
+                //document.querySelector("#googleUser").textContent = JSON.stringify(JSON.parse(user), undefined, 4);
+                document.querySelector("#googleUserName").textContent = JSON.parse(user).displayName;
+            }
+    
+            window.onload = () => {
+                homeInit();
+            };
+        </script>
+        <script type="module" async="async" src="/modal.js" crossorigin="anonymous"></script>
+        <script src="/videosub-0.9.9.js" crossorigin="anonymous"></script>
+    
+    
+    
+    </body>
+    
+</html>
