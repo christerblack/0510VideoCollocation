@@ -12,6 +12,10 @@ export async function filterFirestoreDataUser(username, displayname) {
   const qCondition = query(citiesRef, where("name", "==", displayna));
   const querySnapshot = await getDocs(qCondition);
   console.log("how many document filter out: " + querySnapshot.size); // how many document filter out
+
+  // clear
+  document.querySelector("#containerdis").innerHTML = "";
+
   querySnapshot.forEach((doc) => {
     var eventdata = doc.data();
 
@@ -21,16 +25,16 @@ export async function filterFirestoreDataUser(username, displayname) {
 
     const filterResultObj = { username, example };
 
-    var container = document.createElement('div');
-    container.setAttribute('class', 'container');
-    container.setAttribute('id', 'containerdiscussion');
-    document.querySelector(".card").append(container);
+    // var container = document.createElement('div');
+    // container.setAttribute('class', 'container');
+    // container.setAttribute('id', 'containerdiscussion');
+    // document.querySelector(".card").append(container);
 
     var card = document.createElement('div');
     card.setAttribute('class', 'card bg-light border-dark mb-3');
     card.setAttribute('id', 'card-container');
     card.setAttribute('style', 'max-width: 70rem;');
-    document.querySelector("#containerdiscussion").appendChild(card);
+    document.querySelector("#containerdis").appendChild(card);
 
     var cardheader = document.createElement('div');
     cardheader.setAttribute('class', 'card-header');
@@ -68,69 +72,157 @@ export async function filterFirestoreDataUser(username, displayname) {
 export async function filterFirestoreDataVN(username, displayname) {
   const userna = username;
   const displayna = displayname;
-  const citiesRef = collection(firestoreDB, userna);
+  const citiesRef = collection(firestoreDB, "TargetText");
   const VN = query(citiesRef, where("type", "==", "Verb + Noun"));
   const querySnapshot1 = await getDocs(VN);
   console.log("how many document filter out: " + querySnapshot1.size); // how many document filter out
-  querySnapshot1.forEach((doc) => {
-    
-    var eventdata = doc.data();
 
+  // var eventdata = doc.data();
+
+  // const username = `${doc.data().name}`;
+  // const type = `${doc.data().type}`;
+  // const target = `${doc.data().targetText}`;
+  // const example = `${doc.data().ExampleSentence}`;
+  // const filterResultObj1 = { username, example, type, target };
+  // Object.keys(filterResultObj1).map(function(_) { return filterResultObj1[_]; })
+
+  // console.log(Object.values(filterResultObj1));
+
+  document.querySelector("#containerdis").innerHTML = "";
+
+  const allEventData = [];
+
+  querySnapshot1.forEach((doc) => {
+    var eventdata = doc.data();
+    //console.log("abc>>"+doc.id + doc.data())
+    allEventData.push(eventdata);
     const username = `${doc.data().name}`;
-    const type = `${doc.data().type}`;
     const target = `${doc.data().targetText}`;
     const example = `${doc.data().ExampleSentence}`;
-    const filterResultObj1 = { username, example, type, target };
-    Object.keys(filterResultObj1).map(function(_) { return filterResultObj1[_]; })
+    const filterResultObj = { username, example };
 
-    console.log(Object.values(filterResultObj1));
-
-    
-    document.getElementById('cardhead').innerHTML =  "<div>" + "<p>" + "Username: "+ Object.values(filterResultObj1)[0] + "</p>"; 
-    document.getElementById('cardtitle').innerHTML =  "Example Sentence: "+ Object.values(filterResultObj1)[1]  +"<br>"; 
-    document.getElementById('cardtext').innerHTML =  "Type: " + Object.values(filterResultObj1)[2] +"<br>" + "Target text: " + Object.values(filterResultObj1)[3] ; 
-    
-});
-}
     // var container = document.createElement('div');
     // container.setAttribute('class', 'container');
     // container.setAttribute('id', 'containerdiscussion');
-    // document.querySelector(".card").append(container); 
+    // document.querySelector(".card").append(container);
 
-    // var card = document.createElement('div');
-    // card.setAttribute('class', 'card bg-light border-dark mb-3');
-    // card.setAttribute('id', 'card-container');
-    // card.setAttribute('style', 'max-width: 70rem;');
-    // document.querySelector("#containerdiscussion").appendChild(card);
+    var card = document.createElement('div');
+    card.setAttribute('class', 'card bg-light mb-3');
+    card.setAttribute('id', 'card-container');
+    card.setAttribute('style', 'max-width: 70rem;');
+    document.querySelector("#containerdis").appendChild(card);
 
-    // var cardheader = document.createElement('div');
-    // cardheader.setAttribute('class', 'card-header');
-    // card.appendChild(cardheader);
+    var cardheader = document.createElement('div');
+    cardheader.setAttribute('class', 'card-header');
+    card.appendChild(cardheader);
 
-    // var cardbody = document.createElement('div');
-    // cardbody.setAttribute('class', 'card-body');
-    // card.appendChild(cardbody);
+    var cardbody = document.createElement('div');
+    cardbody.setAttribute('class', 'card-body');
+    card.appendChild(cardbody);
 
-    // var cardtitle = document.createElement('h5');
-    // cardtitle.setAttribute('class', 'card-title');
-    // document.querySelector(".card-body").appendChild(cardtitle);
+    var cardtitle = document.createElement('h5');
+    cardtitle.setAttribute('class', 'card-title');
+    document.querySelector(".card-body").appendChild(cardtitle);
 
-    // var userName = document.createElement('h5');
-    // var targettext = document.createElement('p');
-    // var types = document.createElement('p');
-    // var exampleSentence = document.createElement('p');
-    // userName.innerHTML = "Username: "+username;
-    // targettext.innerHTML = "TargetText: "+target; 
-    // types.innerHTML = "Collocation Types: "+type;
-    // exampleSentence.innerHTML = "Example Sentence: "+example; // added this
+    var userName = document.createElement('h5');
+    var targettext = document.createElement('p');
+    var exampleSentence = document.createElement('p');
+    userName.innerHTML = "Username: " + username;
+    userName.addEventListener('click', () => {
+      // clear container
+      document.querySelector("#containerdis").innerHTML = "";
+      // render user's text
+      const userEventData = allEventData.filter((text) => text.useruid === eventdata.useruid);
+      userEventData.forEach((text) => {
+        // card
+        let card = document.createElement('div');
+        card.setAttribute('class', 'card bg-light mb-3');
+        card.setAttribute('id', 'card-container');
+        card.setAttribute('style', 'max-width: 70rem;');
+        document.querySelector("#containerdis").appendChild(card);
 
-    // card.appendChild(cardheader);
-    // card.appendChild(cardbody);  
-    // cardheader.appendChild(userName);
-    // cardbody.appendChild(targettext);
-    // cardbody.appendChild(types);
-    // cardbody.appendChild(exampleSentence);
- 
+        let userName = document.createElement('h5');
+        userName.innerHTML = "Username: " + text.name;
+
+        let targettext = document.createElement('p');
+        targettext.innerHTML = "TargetText: " + text.targetText;
+
+        let exampleSentence = document.createElement('p');
+        exampleSentence.innerHTML = "Example Sentence: " + text.ExampleSentence; // added this
+
+        let cardheader = document.createElement('div');
+        cardheader.setAttribute('class', 'card-header');
+        card.appendChild(cardheader);
+
+        let cardbody = document.createElement('div');
+        cardbody.setAttribute('class', 'card-body');
+        card.appendChild(cardbody);
+
+        let cardtitle = document.createElement('h5');
+        cardtitle.setAttribute('class', 'card-title');
+        document.querySelector(".card-body").appendChild(cardtitle);
+
+        cardheader.appendChild(userName);
+        cardbody.appendChild(targettext);
+        cardbody.appendChild(exampleSentence);
+      })
+
+    });
+    targettext.innerHTML = "TargetText: " + target;
+    exampleSentence.innerHTML = "Example Sentence: " + example; // added this
+
+    card.appendChild(cardheader);
+    card.appendChild(cardbody);
+    cardheader.appendChild(userName);
+    cardbody.appendChild(targettext);
+    cardbody.appendChild(exampleSentence);
+
+    card.addEventListener("click", () => {
+      window.location.assign("Comments.html" + "?targetTextId=" + doc.id);
+    })
+    card.classList.add('text');
+
+  });
+}
+// var container = document.createElement('div');
+// container.setAttribute('class', 'container');
+// container.setAttribute('id', 'containerdiscussion');
+// document.querySelector(".card").append(container); 
+
+// var card = document.createElement('div');
+// card.setAttribute('class', 'card bg-light border-dark mb-3');
+// card.setAttribute('id', 'card-container');
+// card.setAttribute('style', 'max-width: 70rem;');
+// document.querySelector("#containerdiscussion").appendChild(card);
+
+// var cardheader = document.createElement('div');
+// cardheader.setAttribute('class', 'card-header');
+// card.appendChild(cardheader);
+
+// var cardbody = document.createElement('div');
+// cardbody.setAttribute('class', 'card-body');
+// card.appendChild(cardbody);
+
+// var cardtitle = document.createElement('h5');
+// cardtitle.setAttribute('class', 'card-title');
+// document.querySelector(".card-body").appendChild(cardtitle);
+
+// var userName = document.createElement('h5');
+// var targettext = document.createElement('p');
+// var types = document.createElement('p');
+// var exampleSentence = document.createElement('p');
+// userName.innerHTML = "Username: "+username;
+// targettext.innerHTML = "TargetText: "+target; 
+// types.innerHTML = "Collocation Types: "+type;
+// exampleSentence.innerHTML = "Example Sentence: "+example; // added this
+
+// card.appendChild(cardheader);
+// card.appendChild(cardbody);  
+// cardheader.appendChild(userName);
+// cardbody.appendChild(targettext);
+// cardbody.appendChild(types);
+// cardbody.appendChild(exampleSentence);
+
 // Filter data Verb+Prep
 export async function filterFirestoreDataVPrep(username, displayname) {
   const userna = username;
@@ -144,13 +236,13 @@ export async function filterFirestoreDataVPrep(username, displayname) {
     const type = `${doc.data().type}`;
     const target = `${doc.data().targetText}`;
     const example = `${doc.data().ExampleSentence}`;
-    const filterResultObj1 = { username, example, type , target };
+    const filterResultObj1 = { username, example, type, target };
     console.log(filterResultObj1);
 
-    document.getElementById('cardhead').innerHTML =  "<div>" + "<p>" + "Username: "+ username + "</p>"; 
-    document.getElementById('cardtitle').innerHTML =  "Example Sentence: "+ example  +"<br>"; 
-    document.getElementById('cardtext').innerHTML =  "Type: " + type +"<br>" + "Target text: " + target; 
-    
+    document.getElementById('cardhead').innerHTML = "<div>" + "<p>" + "Username: " + username + "</p>";
+    document.getElementById('cardtitle').innerHTML = "Example Sentence: " + example + "<br>";
+    document.getElementById('cardtext').innerHTML = "Type: " + type + "<br>" + "Target text: " + target;
+
   });
 }
 
@@ -167,12 +259,12 @@ export async function filterFirestoreDataVAdv(username, displayname) {
     const type = `${doc.data().type}`;
     const target = `${doc.data().targetText}`;
     const example = `${doc.data().ExampleSentence}`;
-    const filterResultObj1 = { username, example, type ,target};
+    const filterResultObj1 = { username, example, type, target };
     console.log(filterResultObj1);
-    document.getElementById('cardhead').innerHTML =  "<div>" + "<p>" + "Username: "+ username + "</p>"; 
-    document.getElementById('cardtitle').innerHTML =  "Example Sentence: "+ example  +"<br>"; 
-    document.getElementById('cardtext').innerHTML =  "Type: " + type +"<br>" + "Target text: " + target; 
-    
+    document.getElementById('cardhead').innerHTML = "<div>" + "<p>" + "Username: " + username + "</p>";
+    document.getElementById('cardtitle').innerHTML = "Example Sentence: " + example + "<br>";
+    document.getElementById('cardtext').innerHTML = "Type: " + type + "<br>" + "Target text: " + target;
+
   });
 }
 

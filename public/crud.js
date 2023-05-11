@@ -27,10 +27,11 @@ async function createFirestoreData(target_text) {
   const originText = document.getElementById("text_english");
 
   const text_key = `${target_text}`;
-  await addDoc(collection(firestoreDB, usernameUid), {
+  await addDoc(collection(firestoreDB, "TargetText"), {
     useruid: `${usernameUid}`,
     name: `${username}`,
     targetText: `${target_text}`,
+    
     originText: `${originText.textContent}`,
     videoSRT: `${subtitlesrc}`,
     timestamp: new Date().getTime(),
@@ -38,17 +39,6 @@ async function createFirestoreData(target_text) {
   });
   console.log("create success");
 }
-  // await setDoc(doc(citiesRef, "LA"), {
-  //     name: "Los Angeles",
-  //     state: "CA",
-  //     country: "USA",
-  //     capital: false,
-  //     population: 3900000,
-  //     regions: ["west_coast", "socal"],
-  //     timestamp: new Date().getTime(),
-  //     datetime: new Date(),
-  // });
-
 
 // Read Data
 async function readFirestoreData(TargetWord) {
@@ -61,11 +51,7 @@ async function readFirestoreData(TargetWord) {
   querySnapshot.forEach((doc) => {
     const origintext = doc.data().originText;
     const targettext = doc.data().targetText;
-    //console.log(FireDB , typeof(FireDB));
-    //  console.log(doc.id, " => ", doc.data().name);
-    //  console.log(doc.id, " => ", doc.data().originText);
-    //  console.log(doc.id, " => ", doc.data().targetText);
-    //  console.log(text_KEY);
+    
   });
 }
 
@@ -76,7 +62,7 @@ async function updateFirestoreData(TargetWord,wordType,translateWord,ExampleSen)
   const user = localStorage.getItem("googleUser");
   const usernameUid = JSON.parse(user).uid;
 
-  const q = query(collection(firestoreDB, usernameUid), where("targetText", "==", text_KEY));
+  const q = query(collection(firestoreDB, "TargetText"), where("targetText", "==", text_KEY));
     const querySnapshot = await getDocs(q);
     querySnapshot.docs.map((doc) => 
     updateDoc(doc.ref, { 

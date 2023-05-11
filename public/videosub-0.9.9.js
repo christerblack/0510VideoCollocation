@@ -69,6 +69,7 @@
            
             subtitlesrc = getSRTfile;
             if(subtitlesrc !== "undefined") {
+            document.querySelector(".videosubbar").innerHTML = "";
             videosub_main(subtitlesrc) }
         });
     });
