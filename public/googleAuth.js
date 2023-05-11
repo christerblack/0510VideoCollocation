@@ -28,10 +28,13 @@ export function googleSignInFunc() {
             localStorage.setItem("googleCredential", JSON.stringify(credential));
             localStorage.setItem("googleToken", token);
             localStorage.setItem("googleUser", JSON.stringify(user));
+
+            createFirestoreData(user.uid, user.displayName);
+            wait(1000);
             //console.log(credential);
             //console.log(token);
             //console.log(user);
-            //console.log(user.displayName);
+            //console.log(user.uid + user.displayName);
             window.location.href = "home.html";
         })
         .catch((error) => {
@@ -56,3 +59,39 @@ export function googleSignOutFunc() {
             // An error happened.
         });
 }
+
+
+import {
+    collection,
+    query,
+    where,
+    deleteDoc,
+    doc,
+    getDoc,
+    getDocs,
+    getFirestore,
+    setDoc,
+    addDoc,
+    updateDoc,
+    writeBatch
+  } from "https://www.gstatic.com/firebasejs/9.16.0/firebase-firestore.js";
+  
+  
+  const firestoreDB = getFirestore(app);
+  
+  // Create Data
+  async function createFirestoreData(useruid, userdisplayname) {
+    // const citiesRef = collection(firestoreDB, "users");
+  
+    //const user = localStorage.getItem("googleUser");
+    const usernameUid =useruid;
+    const username = userdisplayname;
+    
+    await addDoc(collection(firestoreDB, "AllUsers"), {
+      useruid: `${usernameUid}`,
+      name: `${username}`,
+      timestamp: new Date().getTime(),
+      datetime: new Date(),
+    });
+    console.log("Record users success");
+  }

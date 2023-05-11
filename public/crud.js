@@ -84,7 +84,7 @@ async function deleteFirestoreData() {
 
 async function all() {
   const user = localStorage.getItem("googleUser");
-  const usernameUid = JSON.parse(user).uid;
+  //const usernameUid = JSON.parse(user).uid;
   const usernamedisplayname = JSON.parse(user).displayName;
   const querySnapshot = await getDocs(collection(firestoreDB, usernameUid));
   querySnapshot.forEach((doc) => {
@@ -93,8 +93,6 @@ async function all() {
     
   });
 }
-all();
-
 
 
 export { createFirestoreData, readFirestoreData, updateFirestoreData, deleteFirestoreData };
