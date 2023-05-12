@@ -28,14 +28,12 @@ export function googleSignInFunc() {
             localStorage.setItem("googleCredential", JSON.stringify(credential));
             localStorage.setItem("googleToken", token);
             localStorage.setItem("googleUser", JSON.stringify(user));
-
-            createFirestoreData(user.uid, user.displayName);
-            wait(1000);
             //console.log(credential);
             //console.log(token);
             //console.log(user);
             //console.log(user.uid + user.displayName);
             window.location.href = "home.html";
+            createFirestoreData(user.uid, user.displayName);
         })
         .catch((error) => {
             const errorCode = error.code;

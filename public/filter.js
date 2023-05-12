@@ -1,56 +1,50 @@
-import { collection, getDocs, getFirestore, query, where } from "https://www.gstatic.com/firebasejs/9.16.0/firebase-firestore.js";
+import { collection, getDocs, getFirestore, query, orderBy, where } from "https://www.gstatic.com/firebasejs/9.16.0/firebase-firestore.js";
 
 import { app } from "/firebaseConfig.js";
 
 const firestoreDB = getFirestore(app);
 
 // Filter data username
-export async function filterFirestoreDataUser(username, displayname) {
-  const userna = username;
-  const displayna = displayname;
-  const citiesRef = collection(firestoreDB, userna);
-  const qCondition = query(citiesRef, where("name", "==", displayna));
+export async function filterFirestoreDataUser(WordType) {
+  const wordtype = WordType;
+  //const userna = username; //google uid
+  //const displayna = displayname; // christer
+  //const doc = this.doc;
+  const citiesRef = collection(firestoreDB, "TargetText");
+  const qCondition = query(citiesRef, wordtype ,orderBy("name"));
   const querySnapshot = await getDocs(qCondition);
-  console.log("how many document filter out: " + querySnapshot.size); // how many document filter out
+  console.log("All firestore order by username and V+N how many document filter out: " + querySnapshot.size); // how many document filter out
 
   // clear
   document.querySelector("#containerdis").innerHTML = "";
-
   querySnapshot.forEach((doc) => {
     var eventdata = doc.data();
-
     const username = `${doc.data().name}`;
+    const type = `${doc.data().type}`;
     const target = `${doc.data().targetText}`;
     const example = `${doc.data().ExampleSentence}`;
-
-    const filterResultObj = { username, example };
-
-    // var container = document.createElement('div');
-    // container.setAttribute('class', 'container');
-    // container.setAttribute('id', 'containerdiscussion');
-    // document.querySelector(".card").append(container);
-
-    var card = document.createElement('div');
-    card.setAttribute('class', 'card bg-light border-dark mb-3');
-    card.setAttribute('id', 'card-container');
-    card.setAttribute('style', 'max-width: 70rem;');
+    //const filterResultObj = { username, example };
+    var card = document.createElement("div");
+    card.setAttribute("class", "card bg-light border-dark mb-3");
+    card.setAttribute("id", "card-container");
+    card.setAttribute("style", "max-width: 70rem;");
     document.querySelector("#containerdis").appendChild(card);
 
-    var cardheader = document.createElement('div');
-    cardheader.setAttribute('class', 'card-header');
+    var cardheader = document.createElement("div");
+    cardheader.setAttribute("class", "card-header");
     card.appendChild(cardheader);
 
-    var cardbody = document.createElement('div');
-    cardbody.setAttribute('class', 'card-body');
+    var cardbody = document.createElement("div");
+    cardbody.setAttribute("class", "card-body");
     card.appendChild(cardbody);
 
-    var cardtitle = document.createElement('h5');
-    cardtitle.setAttribute('class', 'card-title');
+    var cardtitle = document.createElement("h5");
+    cardtitle.setAttribute("class", "card-title");
     document.querySelector(".card-body").appendChild(cardtitle);
 
-    var userName = document.createElement('h5');
-    var targettext = document.createElement('p');
-    var exampleSentence = document.createElement('p');
+    var userName = document.createElement("h5");
+    var targettext = document.createElement("p");
+    var exampleSentence = document.createElement("p");
     userName.innerHTML = "Username: " + username;
     targettext.innerHTML = "TargetText: " + target;
     exampleSentence.innerHTML = "Example Sentence: " + example; // added this
@@ -60,38 +54,83 @@ export async function filterFirestoreDataUser(username, displayname) {
     cardheader.appendChild(userName);
     cardbody.appendChild(targettext);
     cardbody.appendChild(exampleSentence);
-    console.log(eventdata);
-    console.log(filterResultObj);
+    //console.log(eventdata);
+    //console.log(filterResultObj);
+    card.addEventListener("click", () => {
+      window.location.assign("Comments.html" + "?targetTextId=" + doc.id);
+    });
+    card.classList.add("text");
   });
 }
 
+// Filter data username
+export async function filterFirestoreDataFrequency(WordType) {
+  const wordtype = WordType;
+ 
+  const citiesRef = collection(firestoreDB, "TargetText");
+  const qCondition = query(citiesRef, wordtype ,orderBy("targetText"));
+  const querySnapshot = await getDocs(qCondition);
+  console.log("All firestore order by targettext and V+N how many document filter out: " + querySnapshot.size); // how many document filter out
 
+  // clear
+  document.querySelector("#containerdis").innerHTML = "";
+  querySnapshot.forEach((doc) => {
+    var eventdata = doc.data();
+    const username = `${doc.data().name}`;
+    const type = `${doc.data().type}`;
+    const target = `${doc.data().targetText}`;
+    const example = `${doc.data().ExampleSentence}`;
+    //const filterResultObj = { username, example };
+    var card = document.createElement("div");
+    card.setAttribute("class", "card bg-light border-dark mb-3");
+    card.setAttribute("id", "card-container");
+    card.setAttribute("style", "max-width: 70rem;");
+    document.querySelector("#containerdis").appendChild(card);
 
+    var cardheader = document.createElement("div");
+    cardheader.setAttribute("class", "card-header");
+    card.appendChild(cardheader);
+
+    var cardbody = document.createElement("div");
+    cardbody.setAttribute("class", "card-body");
+    card.appendChild(cardbody);
+
+    var cardtitle = document.createElement("h5");
+    cardtitle.setAttribute("class", "card-title");
+    document.querySelector(".card-body").appendChild(cardtitle);
+
+    var userName = document.createElement("h5");
+    var targettext = document.createElement("p");
+    var exampleSentence = document.createElement("p");
+    userName.innerHTML = "Username: " + username;
+    targettext.innerHTML = "TargetText: " + target;
+    exampleSentence.innerHTML = "Example Sentence: " + example; // added this
+
+    card.appendChild(cardheader);
+    card.appendChild(cardbody);
+    cardheader.appendChild(userName);
+    cardbody.appendChild(targettext);
+    cardbody.appendChild(exampleSentence);
+    //console.log(eventdata);
+    //console.log(filterResultObj);
+    card.addEventListener("click", () => {
+      window.location.assign("Comments.html" + "?targetTextId=" + doc.id);
+    });
+    card.classList.add("text");
+  });
+}
 
 // Filter data Verb+Noun
-export async function filterFirestoreDataVN(username, displayname) {
-  const userna = username;
-  const displayna = displayname;
+export async function filterFirestoreDataVN() {
+  //const userna = username;
+  //const displayna = displayname;
   const citiesRef = collection(firestoreDB, "TargetText");
   const VN = query(citiesRef, where("type", "==", "Verb + Noun"));
   const querySnapshot1 = await getDocs(VN);
-  console.log("how many document filter out: " + querySnapshot1.size); // how many document filter out
-
-  // var eventdata = doc.data();
-
-  // const username = `${doc.data().name}`;
-  // const type = `${doc.data().type}`;
-  // const target = `${doc.data().targetText}`;
-  // const example = `${doc.data().ExampleSentence}`;
-  // const filterResultObj1 = { username, example, type, target };
-  // Object.keys(filterResultObj1).map(function(_) { return filterResultObj1[_]; })
-
-  // console.log(Object.values(filterResultObj1));
+  console.log("V+N how many document filter out: " + querySnapshot1.size); // how many document filter out
 
   document.querySelector("#containerdis").innerHTML = "";
-
   const allEventData = [];
-
   querySnapshot1.forEach((doc) => {
     var eventdata = doc.data();
     //console.log("abc>>"+doc.id + doc.data())
@@ -99,74 +138,68 @@ export async function filterFirestoreDataVN(username, displayname) {
     const username = `${doc.data().name}`;
     const target = `${doc.data().targetText}`;
     const example = `${doc.data().ExampleSentence}`;
-    const filterResultObj = { username, example };
+    //const filterResultObj = { username, example };
 
-    // var container = document.createElement('div');
-    // container.setAttribute('class', 'container');
-    // container.setAttribute('id', 'containerdiscussion');
-    // document.querySelector(".card").append(container);
-
-    var card = document.createElement('div');
-    card.setAttribute('class', 'card bg-light mb-3');
-    card.setAttribute('id', 'card-container');
-    card.setAttribute('style', 'max-width: 70rem;');
+    var card = document.createElement("div");
+    card.setAttribute("class", "card bg-light mb-3");
+    card.setAttribute("id", "card-container");
+    card.setAttribute("style", "max-width: 70rem;");
     document.querySelector("#containerdis").appendChild(card);
 
-    var cardheader = document.createElement('div');
-    cardheader.setAttribute('class', 'card-header');
+    var cardheader = document.createElement("div");
+    cardheader.setAttribute("class", "card-header");
     card.appendChild(cardheader);
 
-    var cardbody = document.createElement('div');
-    cardbody.setAttribute('class', 'card-body');
+    var cardbody = document.createElement("div");
+    cardbody.setAttribute("class", "card-body");
     card.appendChild(cardbody);
 
-    var cardtitle = document.createElement('h5');
-    cardtitle.setAttribute('class', 'card-title');
+    var cardtitle = document.createElement("h5");
+    cardtitle.setAttribute("class", "card-title");
     document.querySelector(".card-body").appendChild(cardtitle);
 
-    var userName = document.createElement('h5');
-    var targettext = document.createElement('p');
-    var exampleSentence = document.createElement('p');
+    var userName = document.createElement("h5");
+    var targettext = document.createElement("p");
+    var exampleSentence = document.createElement("p");
     userName.innerHTML = "Username: " + username;
-    userName.addEventListener('click', () => {
+    userName.addEventListener("click", () => {
       // clear container
       document.querySelector("#containerdis").innerHTML = "";
       // render user's text
-      const userEventData = allEventData.filter((text) => text.useruid === eventdata.useruid);
-      userEventData.forEach((text) => {
-        // card
-        let card = document.createElement('div');
-        card.setAttribute('class', 'card bg-light mb-3');
-        card.setAttribute('id', 'card-container');
-        card.setAttribute('style', 'max-width: 70rem;');
-        document.querySelector("#containerdis").appendChild(card);
+      // const userEventData = allEventData.filter((text) => text.useruid === eventdata.useruid);
+      // userEventData.forEach((text) => {
+      //   // card
+      //   let card = document.createElement('div');
+      //   card.setAttribute('class', 'card bg-light mb-3');
+      //   card.setAttribute('id', 'card-container');
+      //   card.setAttribute('style', 'max-width: 70rem;');
+      //   document.querySelector("#containerdis").appendChild(card);
 
-        let userName = document.createElement('h5');
-        userName.innerHTML = "Username: " + text.name;
+      //   let userName = document.createElement('h5');
+      //   userName.innerHTML = "Username: " + text.name;
 
-        let targettext = document.createElement('p');
-        targettext.innerHTML = "TargetText: " + text.targetText;
+      //   let targettext = document.createElement('p');
+      //  // targettext.innerHTML = "TargetText: " + text.targetText;
 
-        let exampleSentence = document.createElement('p');
-        exampleSentence.innerHTML = "Example Sentence: " + text.ExampleSentence; // added this
+      //   let exampleSentence = document.createElement('p');
+      //  /// exampleSentence.innerHTML = "Example Sentence: " + text.ExampleSentence; // added this
 
-        let cardheader = document.createElement('div');
-        cardheader.setAttribute('class', 'card-header');
-        card.appendChild(cardheader);
+      //   let cardheader = document.createElement('div');
+      //   cardheader.setAttribute('class', 'card-header');
+      //   card.appendChild(cardheader);
 
-        let cardbody = document.createElement('div');
-        cardbody.setAttribute('class', 'card-body');
-        card.appendChild(cardbody);
+      //   let cardbody = document.createElement('div');
+      //   cardbody.setAttribute('class', 'card-body');
+      //   card.appendChild(cardbody);
 
-        let cardtitle = document.createElement('h5');
-        cardtitle.setAttribute('class', 'card-title');
-        document.querySelector(".card-body").appendChild(cardtitle);
+      //   let cardtitle = document.createElement('h5');
+      //   cardtitle.setAttribute('class', 'card-title');
+      //   document.querySelector(".card-body").appendChild(cardtitle);
 
-        cardheader.appendChild(userName);
-        cardbody.appendChild(targettext);
-        cardbody.appendChild(exampleSentence);
-      })
-
+      //   cardheader.appendChild(userName);
+      //   cardbody.appendChild(targettext);
+      //   cardbody.appendChild(exampleSentence);
+      // })
     });
     targettext.innerHTML = "TargetText: " + target;
     exampleSentence.innerHTML = "Example Sentence: " + example; // added this
@@ -179,147 +212,208 @@ export async function filterFirestoreDataVN(username, displayname) {
 
     card.addEventListener("click", () => {
       window.location.assign("Comments.html" + "?targetTextId=" + doc.id);
-    })
-    card.classList.add('text');
-
+    });
+    card.classList.add("text");
   });
 }
-// var container = document.createElement('div');
-// container.setAttribute('class', 'container');
-// container.setAttribute('id', 'containerdiscussion');
-// document.querySelector(".card").append(container); 
-
-// var card = document.createElement('div');
-// card.setAttribute('class', 'card bg-light border-dark mb-3');
-// card.setAttribute('id', 'card-container');
-// card.setAttribute('style', 'max-width: 70rem;');
-// document.querySelector("#containerdiscussion").appendChild(card);
-
-// var cardheader = document.createElement('div');
-// cardheader.setAttribute('class', 'card-header');
-// card.appendChild(cardheader);
-
-// var cardbody = document.createElement('div');
-// cardbody.setAttribute('class', 'card-body');
-// card.appendChild(cardbody);
-
-// var cardtitle = document.createElement('h5');
-// cardtitle.setAttribute('class', 'card-title');
-// document.querySelector(".card-body").appendChild(cardtitle);
-
-// var userName = document.createElement('h5');
-// var targettext = document.createElement('p');
-// var types = document.createElement('p');
-// var exampleSentence = document.createElement('p');
-// userName.innerHTML = "Username: "+username;
-// targettext.innerHTML = "TargetText: "+target; 
-// types.innerHTML = "Collocation Types: "+type;
-// exampleSentence.innerHTML = "Example Sentence: "+example; // added this
-
-// card.appendChild(cardheader);
-// card.appendChild(cardbody);  
-// cardheader.appendChild(userName);
-// cardbody.appendChild(targettext);
-// cardbody.appendChild(types);
-// cardbody.appendChild(exampleSentence);
 
 // Filter data Verb+Prep
-export async function filterFirestoreDataVPrep(username, displayname) {
-  const userna = username;
-  const displayna = displayname;
-  const citiesRef = collection(firestoreDB, userna);
+export async function filterFirestoreDataVPrep() {
+  //const userna = username;
+  //const displayna = displayname;
+  const citiesRef = collection(firestoreDB, "TargetText");
   const VP = query(citiesRef, where("type", "==", "Verb + Prep"));
   const querySnapshot1 = await getDocs(VP);
-  console.log("how many document filter out: " + querySnapshot1.size); // how many document filter out
+  console.log("V+P how many document filter out: " + querySnapshot1.size); // how many document filter out
+
+  document.querySelector("#containerdis").innerHTML = "";
+  const allEventData = [];
   querySnapshot1.forEach((doc) => {
+    var eventdata = doc.data();
+    //console.log("abc>>"+doc.id + doc.data())
+    allEventData.push(eventdata);
     const username = `${doc.data().name}`;
-    const type = `${doc.data().type}`;
     const target = `${doc.data().targetText}`;
     const example = `${doc.data().ExampleSentence}`;
-    const filterResultObj1 = { username, example, type, target };
-    console.log(filterResultObj1);
+    //const filterResultObj = { username, example };
 
-    document.getElementById('cardhead').innerHTML = "<div>" + "<p>" + "Username: " + username + "</p>";
-    document.getElementById('cardtitle').innerHTML = "Example Sentence: " + example + "<br>";
-    document.getElementById('cardtext').innerHTML = "Type: " + type + "<br>" + "Target text: " + target;
+    var card = document.createElement("div");
+    card.setAttribute("class", "card bg-light mb-3");
+    card.setAttribute("id", "card-container");
+    card.setAttribute("style", "max-width: 70rem;");
+    document.querySelector("#containerdis").appendChild(card);
 
+    var cardheader = document.createElement("div");
+    cardheader.setAttribute("class", "card-header");
+    card.appendChild(cardheader);
+
+    var cardbody = document.createElement("div");
+    cardbody.setAttribute("class", "card-body");
+    card.appendChild(cardbody);
+
+    var cardtitle = document.createElement("h5");
+    cardtitle.setAttribute("class", "card-title");
+    document.querySelector(".card-body").appendChild(cardtitle);
+
+    var userName = document.createElement("h5");
+    var targettext = document.createElement("p");
+    var exampleSentence = document.createElement("p");
+    userName.innerHTML = "Username: " + username;
+    userName.addEventListener("click", () => {
+      // clear container
+      document.querySelector("#containerdis").innerHTML = "";
+    });
+    targettext.innerHTML = "TargetText: " + target;
+    exampleSentence.innerHTML = "Example Sentence: " + example; // added this
+
+    card.appendChild(cardheader);
+    card.appendChild(cardbody);
+    cardheader.appendChild(userName);
+    cardbody.appendChild(targettext);
+    cardbody.appendChild(exampleSentence);
+
+    card.addEventListener("click", () => {
+      window.location.assign("Comments.html" + "?targetTextId=" + doc.id);
+    });
+    card.classList.add("text");
   });
 }
 
 // Filter data Verb+Adv
-export async function filterFirestoreDataVAdv(username, displayname) {
-  const userna = username;
-  const displayna = displayname;
-  const citiesRef = collection(firestoreDB, userna);
-  const VP = query(citiesRef, where("type", "==", "Verb + Adv"));
-  const querySnapshot1 = await getDocs(VP);
-  console.log("how many document filter out: " + querySnapshot1.size); // how many document filter out
+export async function filterFirestoreDataVAdv() {
+  //const userna = username;
+  //const displayna = displayname;
+  const citiesRef = collection(firestoreDB, "TargetText");
+  const VA = query(citiesRef, where("type", "==", "Verb + Adv"));
+  const querySnapshot1 = await getDocs(VA);
+  console.log("V+P how many document filter out: " + querySnapshot1.size); // how many document filter out
+
+  document.querySelector("#containerdis").innerHTML = "";
+  const allEventData = [];
   querySnapshot1.forEach((doc) => {
+    var eventdata = doc.data();
+    //console.log("abc>>"+doc.id + doc.data())
+    allEventData.push(eventdata);
     const username = `${doc.data().name}`;
-    const type = `${doc.data().type}`;
     const target = `${doc.data().targetText}`;
     const example = `${doc.data().ExampleSentence}`;
-    const filterResultObj1 = { username, example, type, target };
-    console.log(filterResultObj1);
-    document.getElementById('cardhead').innerHTML = "<div>" + "<p>" + "Username: " + username + "</p>";
-    document.getElementById('cardtitle').innerHTML = "Example Sentence: " + example + "<br>";
-    document.getElementById('cardtext').innerHTML = "Type: " + type + "<br>" + "Target text: " + target;
+    //const filterResultObj = { username, example };
 
+    var card = document.createElement("div");
+    card.setAttribute("class", "card bg-light mb-3");
+    card.setAttribute("id", "card-container");
+    card.setAttribute("style", "max-width: 70rem;");
+    document.querySelector("#containerdis").appendChild(card);
+
+    var cardheader = document.createElement("div");
+    cardheader.setAttribute("class", "card-header");
+    card.appendChild(cardheader);
+
+    var cardbody = document.createElement("div");
+    cardbody.setAttribute("class", "card-body");
+    card.appendChild(cardbody);
+
+    var cardtitle = document.createElement("h5");
+    cardtitle.setAttribute("class", "card-title");
+    document.querySelector(".card-body").appendChild(cardtitle);
+
+    var userName = document.createElement("h5");
+    var targettext = document.createElement("p");
+    var exampleSentence = document.createElement("p");
+    userName.innerHTML = "Username: " + username;
+    userName.addEventListener("click", () => {
+      // clear container
+      document.querySelector("#containerdis").innerHTML = "";
+    });
+    targettext.innerHTML = "TargetText: " + target;
+    exampleSentence.innerHTML = "Example Sentence: " + example; // added this
+
+    card.appendChild(cardheader);
+    card.appendChild(cardbody);
+    cardheader.appendChild(userName);
+    cardbody.appendChild(targettext);
+    cardbody.appendChild(exampleSentence);
+
+    card.addEventListener("click", () => {
+      window.location.assign("Comments.html" + "?targetTextId=" + doc.id);
+    });
+    card.classList.add("text");
   });
 }
 
+//sort V+N and listen to sort by username
 const sortVerbNoun = document.querySelector('[data-link="sortVerbNoun"]');
 sortVerbNoun?.addEventListener("click", () => {
-  const user = localStorage.getItem("googleUser");
-  const usernameUid = JSON.parse(user).uid;
-  const usernamedisplayname = JSON.parse(user).displayName;
-  filterFirestoreDataVN(usernameUid, usernamedisplayname);
+  filterFirestoreDataVN();
+  //first filter V+N and then sort by username
+  const sortUserVN = document.querySelector('[data-link="sortUser"]');
+  sortUserVN?.addEventListener("click", () => {
+    const wordtype = where("type", "==", "Verb + Noun")
+    filterFirestoreDataUser(wordtype);
+  });
 });
 
+//sort V+Adv and listen to sort by username
 const sortVerbAdv = document.querySelector('[data-link="sortVerbAdv"]');
 sortVerbAdv?.addEventListener("click", () => {
-  const user = localStorage.getItem("googleUser");
-  const usernameUid = JSON.parse(user).uid;
-  const usernamedisplayname = JSON.parse(user).displayName;
-  filterFirestoreDataVAdv(usernameUid, usernamedisplayname);
+  //const user = localStorage.getItem("googleUser");
+  //const usernameUid = JSON.parse(user).uid;
+  //const usernamedisplayname = JSON.parse(user).displayName;
+  filterFirestoreDataVAdv();
+
+  //first filter V+Adv and then sort by username
+  const sortUserAdv = document.querySelector('[data-link="sortUser"]');
+  sortUserAdv?.addEventListener("click", () => {
+    //const user = localStorage.getItem("googleUser");
+    //const usernameUid = JSON.parse(user).uid;
+    //const usernamedisplayname = JSON.parse(user).displayName;
+    const wordtype = where("type", "==", "Verb + Adv")
+    filterFirestoreDataUser(wordtype);
+  });
 });
 
+//sort V+Prep and listen to sort by username
 const sortVerbPrep = document.querySelector('[data-link="sortVerbPrep"]');
 sortVerbPrep?.addEventListener("click", () => {
-  const user = localStorage.getItem("googleUser");
-  const usernameUid = JSON.parse(user).uid;
-  const usernamedisplayname = JSON.parse(user).displayName;
-  filterFirestoreDataVPrep(usernameUid, usernamedisplayname);
+  //const user = localStorage.getItem("googleUser");
+  // const usernameUid = JSON.parse(user).uid;
+  //const usernamedisplayname = JSON.parse(user).displayName;
+  filterFirestoreDataVPrep();
+
+  //first filter V+Adv and then sort by username
+  const sortUserPrep = document.querySelector('[data-link="sortUser"]');
+  sortUserPrep?.addEventListener("click", () => {
+    //const user = localStorage.getItem("googleUser");
+    //const usernameUid = JSON.parse(user).uid;
+    //const usernamedisplayname = JSON.parse(user).displayName;
+    const wordtype = where("type", "==", "Verb + Prep")
+    filterFirestoreDataUser(wordtype);
+  });
 });
 
+//only sort user but nt need to do anythings
 const sortUser = document.querySelector('[data-link="sortUser"]');
 sortUser?.addEventListener("click", () => {
-  const user = localStorage.getItem("googleUser");
-  const usernameUid = JSON.parse(user).uid;
-  const usernamedisplayname = JSON.parse(user).displayName;
-  filterFirestoreDataUser(usernameUid, usernamedisplayname);
+  document.querySelector("#containerdis").innerHTML = "";
+  //filterFirestoreDataUser();
+});
+
+//only sort frequency but nt need to do anythings
+const sortFrequency = document.querySelector('[data-link="sortFrequency"]');
+sortFrequency?.addEventListener("click", () => {
+  document.querySelector("#containerdis").innerHTML = "";
+  //filterFirestoreDataFrequency();
 });
 
 
-// // Write Javascript code!
-// $(function () {
-//   var html = "";
-//   $.ajax({
-//     url: "https://jsonplaceholder.typicode.com/posts",
-//     success: function (result) {
-//       $.each(result, function (index, item) {
-//         html +=
-//           '<div class="card bg-light border-dark mb-3" style="max-width: 70rem;">';
-//         html += `<div class="card-header">userid: ${item.userId} - id: ${item.id}</div>`;
-//         html += '<div class="card-body">';
-//         html += `<h5 class="card-title">${item.title}</h5>`;
-//         html += `<p class="card-text">${item.body}</p>`;
-//         html += "</div>";
-//         html += "</div>";
-//         html += "</div>";
-//         //using .html() will display one card,use loop to display each card
-//       });
-//       $("#containerdiscussion").html(html);
-//     }
-//   });
-// });
+//sort V+N and listen to sort by frequency
+const sortVNFrequency = document.querySelector('[data-link="sortVerbNoun"]');
+sortVNFrequency?.addEventListener("click", () => {
+  filterFirestoreDataVN();
+  //first filter V+N and then sort by frequency
+  const sortFrequnVN = document.querySelector('[data-link="sortFrequency"]');
+  sortFrequnVN?.addEventListener("click", () => {
+    const wordtype = where("type", "==", "Verb + Noun")
+    filterFirestoreDataFrequency(wordtype); 
+  });
+});

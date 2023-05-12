@@ -8,24 +8,21 @@
     <title>Document</title>
     <link rel="shortcut icon" href="#">
     <!-- <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" /> -->
-    <script type="module" defer="defer" src="/init-firebase.js"></script>
-    <script type="module" async="async" src="/crud.js" crossorigin="anonymous"></script>
-    <script type="module" async="async" src="/filter.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" type="text/css"
         href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" />
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js" />
     <link rel="stylesheet" type="text/css"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
-
-    <link rel="stylesheet" href="./comments.css" />
+    <link rel="stylesheet" href="/css/comments.css" />
     <script type="module" async="async" src="comment.js" crossorigin="anonymous"></script>
-
+    <script type="module" defer="defer" src="/init-firebase.js"></script>
+    <script type="module" async="async" src="/crud.js" crossorigin="anonymous"></script>
+    <script type="module" async="async" src="/filter.js" crossorigin="anonymous"></script>
 </head>
 
 
 <body>
-
     <div class="container mt-5 mb-5">
         <div class="d-flex justify-content-center row">
             <div class="d-flex flex-column col-md-8">
@@ -46,14 +43,14 @@
                             <span>6 hours ago</span>
                         </div>
                     </div> -->
-                    <div class="card bg-light mb-3 text" id="card-container" >
+                    <div class="card" id="card-container" >
                         <div class="card-header">
                             <h5 class="Username" id="username">Username: </h5>
                         </div>
                         <div class="card-body">
                             <h5 class="card-title"></h5>
-                            <p class="TargetText" id="TargetText">Target Text: </p>
-                            <p class="Example Sentence" id="Example Sentence">Example Sentence: </p>
+                            <p class="TargetText" id="targertext">Target Text: </p>
+                            <p class="Example Sentence" id="examplesentence">Example Sentence: </p>
                             <h5 class="card-title"></h5>
                         </div>
                     </div>
