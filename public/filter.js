@@ -1,19 +1,19 @@
-import { collection, getDocs, getFirestore, query, orderBy, where } from "https://www.gstatic.com/firebasejs/9.16.0/firebase-firestore.js";
+import { collection, getDocs, getFirestore, limit ,query, orderBy, where } from "https://www.gstatic.com/firebasejs/9.16.0/firebase-firestore.js";
 
 import { app } from "/firebaseConfig.js";
 
 const firestoreDB = getFirestore(app);
 
 // Filter data username
-export async function filterFirestoreDataUser(WordType) {
-  const wordtype = WordType;
+export async function filterFirestoreDataUser(WordTypeUser) {
+  const wordtype = WordTypeUser;
   //const userna = username; //google uid
   //const displayna = displayname; // christer
   //const doc = this.doc;
   const citiesRef = collection(firestoreDB, "TargetText");
-  const qCondition = query(citiesRef, wordtype ,orderBy("name"));
+  const qCondition = query(citiesRef, wordtype, orderBy("name"));
   const querySnapshot = await getDocs(qCondition);
-  console.log("All firestore order by username and V+N how many document filter out: " + querySnapshot.size); // how many document filter out
+  console.log("All firestore order by username how many document filter out: " + querySnapshot.size); // how many document filter out
 
   // clear
   document.querySelector("#containerdis").innerHTML = "";
@@ -63,14 +63,14 @@ export async function filterFirestoreDataUser(WordType) {
   });
 }
 
-// Filter data username
-export async function filterFirestoreDataFrequency(WordType) {
-  const wordtype = WordType;
- 
+// Filter data frequency
+export async function filterFirestoreDataFrequency(WordTypeFreq) {
+  const wordtype = WordTypeFreq;
+
   const citiesRef = collection(firestoreDB, "TargetText");
-  const qCondition = query(citiesRef, wordtype ,orderBy("targetText"));
+  const qCondition = query(citiesRef, wordtype, orderBy("targetText"));
   const querySnapshot = await getDocs(qCondition);
-  console.log("All firestore order by targettext and V+N how many document filter out: " + querySnapshot.size); // how many document filter out
+  console.log("All firestore order by targettext and wordtype how many document filter out: " + querySnapshot.size); // how many document filter out
 
   // clear
   document.querySelector("#containerdis").innerHTML = "";
@@ -286,7 +286,7 @@ export async function filterFirestoreDataVAdv() {
   const citiesRef = collection(firestoreDB, "TargetText");
   const VA = query(citiesRef, where("type", "==", "Verb + Adv"));
   const querySnapshot1 = await getDocs(VA);
-  console.log("V+P how many document filter out: " + querySnapshot1.size); // how many document filter out
+  console.log("V+Adv how many document filter out: " + querySnapshot1.size); // how many document filter out
 
   document.querySelector("#containerdis").innerHTML = "";
   const allEventData = [];
@@ -348,46 +348,34 @@ sortVerbNoun?.addEventListener("click", () => {
   //first filter V+N and then sort by username
   const sortUserVN = document.querySelector('[data-link="sortUser"]');
   sortUserVN?.addEventListener("click", () => {
-    const wordtype = where("type", "==", "Verb + Noun")
-    filterFirestoreDataUser(wordtype);
+    const wordtypeNoun = where("type", "==", "Verb + Noun");
+    filterFirestoreDataUser(wordtypeNoun);
   });
 });
 
 //sort V+Adv and listen to sort by username
 const sortVerbAdv = document.querySelector('[data-link="sortVerbAdv"]');
 sortVerbAdv?.addEventListener("click", () => {
-  //const user = localStorage.getItem("googleUser");
-  //const usernameUid = JSON.parse(user).uid;
-  //const usernamedisplayname = JSON.parse(user).displayName;
   filterFirestoreDataVAdv();
 
   //first filter V+Adv and then sort by username
   const sortUserAdv = document.querySelector('[data-link="sortUser"]');
   sortUserAdv?.addEventListener("click", () => {
-    //const user = localStorage.getItem("googleUser");
-    //const usernameUid = JSON.parse(user).uid;
-    //const usernamedisplayname = JSON.parse(user).displayName;
-    const wordtype = where("type", "==", "Verb + Adv")
-    filterFirestoreDataUser(wordtype);
+    const wordtypeAdv = where("type", "==", "Verb + Adv");
+    filterFirestoreDataUser(wordtypeAdv);
   });
 });
 
 //sort V+Prep and listen to sort by username
 const sortVerbPrep = document.querySelector('[data-link="sortVerbPrep"]');
 sortVerbPrep?.addEventListener("click", () => {
-  //const user = localStorage.getItem("googleUser");
-  // const usernameUid = JSON.parse(user).uid;
-  //const usernamedisplayname = JSON.parse(user).displayName;
   filterFirestoreDataVPrep();
 
   //first filter V+Adv and then sort by username
   const sortUserPrep = document.querySelector('[data-link="sortUser"]');
   sortUserPrep?.addEventListener("click", () => {
-    //const user = localStorage.getItem("googleUser");
-    //const usernameUid = JSON.parse(user).uid;
-    //const usernamedisplayname = JSON.parse(user).displayName;
-    const wordtype = where("type", "==", "Verb + Prep")
-    filterFirestoreDataUser(wordtype);
+    const wordtypePrep = where("type", "==", "Verb + Prep");
+    filterFirestoreDataUser(wordtypePrep);
   });
 });
 
@@ -402,9 +390,8 @@ sortUser?.addEventListener("click", () => {
 const sortFrequency = document.querySelector('[data-link="sortFrequency"]');
 sortFrequency?.addEventListener("click", () => {
   document.querySelector("#containerdis").innerHTML = "";
-  //filterFirestoreDataFrequency();
+  //filterFiresnostoreDataFrequency();
 });
-
 
 //sort V+N and listen to sort by frequency
 const sortVNFrequency = document.querySelector('[data-link="sortVerbNoun"]');
@@ -413,7 +400,55 @@ sortVNFrequency?.addEventListener("click", () => {
   //first filter V+N and then sort by frequency
   const sortFrequnVN = document.querySelector('[data-link="sortFrequency"]');
   sortFrequnVN?.addEventListener("click", () => {
-    const wordtype = where("type", "==", "Verb + Noun")
-    filterFirestoreDataFrequency(wordtype); 
+    const wordtypeFreqNoun = where("type", "==", "Verb + Noun");
+    filterFirestoreDataFrequency(wordtypeFreqNoun);
   });
 });
+
+//sort V+Adv and listen to sort by frequency
+const sortVAdvFrequency = document.querySelector('[data-link="sortVerbAdv"]');
+sortVAdvFrequency?.addEventListener("click", () => {
+  filterFirestoreDataVAdv();
+  //first filter V+N and then sort by frequency
+  const sortFrequnVAdv = document.querySelector('[data-link="sortFrequency"]');
+  sortFrequnVAdv?.addEventListener("click", () => {
+    const wordtypeFreqVAdv = where("type", "==", "Verb + Adv");
+    filterFirestoreDataFrequency(wordtypeFreqVAdv);
+  });
+});
+
+//sort V+Prep and listen to sort by frequency
+const sortVPrepFrequency = document.querySelector('[data-link="sortVerbPrep"]');
+sortVPrepFrequency?.addEventListener("click", () => {
+  filterFirestoreDataVPrep();
+  //first filter V+Prep and then sort by frequency
+  const sortFrequnVPrep = document.querySelector('[data-link="sortFrequency"]');
+  sortFrequnVPrep?.addEventListener("click", () => {
+    const wordtypeFreqVprep = where("type", "==", "Verb + Prep");
+    filterFirestoreDataFrequency(wordtypeFreqVprep);
+  });
+});
+
+export async function filtercountingGroupbytargettext() {
+  //const wordtype = WordTypeFreq;
+  const citiesRef = collection(firestoreDB, "TargetText");
+  const qCondition = query(citiesRef, orderBy("targetText"));
+  const querySnapshot = await getDocs(qCondition);
+  console.log("All firestore order by targettext and wordtype how many document filter out: " + querySnapshot.size); // how many document filter out
+  //clear
+  //document.querySelector("#containerdis").innerHTML = "";
+  querySnapshot.forEach((doc) => {
+  
+   var eventdata = doc.data();
+   const id = doc.id;
+   const username = `${doc.data().name}`;
+   const type = `${doc.data().type}`;
+   const target = `${doc.data().targetText}`;
+   const example = `${doc.data().ExampleSentence}`;
+   const filterResultObj = { id,username,type,target };
+   //console.log("filtercouting"+ doc.id + username + type + target + example );
+   console.log(filterResultObj);
+});
+
+}
+filtercountingGroupbytargettext();
