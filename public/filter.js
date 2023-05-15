@@ -1,4 +1,4 @@
-import { collection, getDocs, getFirestore, limit ,query, orderBy, where } from "https://www.gstatic.com/firebasejs/9.16.0/firebase-firestore.js";
+import { collection, getDocs, getFirestore, limit, query, orderBy, where } from "https://www.gstatic.com/firebasejs/9.16.0/firebase-firestore.js";
 
 import { app } from "/firebaseConfig.js";
 
@@ -370,7 +370,6 @@ sortVerbAdv?.addEventListener("click", () => {
 const sortVerbPrep = document.querySelector('[data-link="sortVerbPrep"]');
 sortVerbPrep?.addEventListener("click", () => {
   filterFirestoreDataVPrep();
-
   //first filter V+Adv and then sort by username
   const sortUserPrep = document.querySelector('[data-link="sortUser"]');
   sortUserPrep?.addEventListener("click", () => {
@@ -383,72 +382,155 @@ sortVerbPrep?.addEventListener("click", () => {
 const sortUser = document.querySelector('[data-link="sortUser"]');
 sortUser?.addEventListener("click", () => {
   document.querySelector("#containerdis").innerHTML = "";
-  //filterFirestoreDataUser();
+  const wordtypeNoun = where("type", "==", "Verb + Noun");
+  filterFirestoreDataUser(wordtypeNoun);  // default sorting username is V+N
 });
 
 //only sort frequency but nt need to do anythings
 const sortFrequency = document.querySelector('[data-link="sortFrequency"]');
 sortFrequency?.addEventListener("click", () => {
   document.querySelector("#containerdis").innerHTML = "";
-  //filterFiresnostoreDataFrequency();
+  Sortbytargettext(); // default sorting is frequency is V+N
 });
+
+let type = 'Verb + Noun';
 
 //sort V+N and listen to sort by frequency
 const sortVNFrequency = document.querySelector('[data-link="sortVerbNoun"]');
 sortVNFrequency?.addEventListener("click", () => {
   filterFirestoreDataVN();
-  //first filter V+N and then sort by frequency
-  const sortFrequnVN = document.querySelector('[data-link="sortFrequency"]');
-  sortFrequnVN?.addEventListener("click", () => {
-    const wordtypeFreqNoun = where("type", "==", "Verb + Noun");
-    filterFirestoreDataFrequency(wordtypeFreqNoun);
-  });
+  type = 'Verb + Noun';
+
 });
 
 //sort V+Adv and listen to sort by frequency
 const sortVAdvFrequency = document.querySelector('[data-link="sortVerbAdv"]');
 sortVAdvFrequency?.addEventListener("click", () => {
   filterFirestoreDataVAdv();
-  //first filter V+N and then sort by frequency
-  const sortFrequnVAdv = document.querySelector('[data-link="sortFrequency"]');
-  sortFrequnVAdv?.addEventListener("click", () => {
-    const wordtypeFreqVAdv = where("type", "==", "Verb + Adv");
-    filterFirestoreDataFrequency(wordtypeFreqVAdv);
-  });
+  type = 'Verb + Adv';
 });
 
 //sort V+Prep and listen to sort by frequency
 const sortVPrepFrequency = document.querySelector('[data-link="sortVerbPrep"]');
 sortVPrepFrequency?.addEventListener("click", () => {
   filterFirestoreDataVPrep();
-  //first filter V+Prep and then sort by frequency
-  const sortFrequnVPrep = document.querySelector('[data-link="sortFrequency"]');
-  sortFrequnVPrep?.addEventListener("click", () => {
-    const wordtypeFreqVprep = where("type", "==", "Verb + Prep");
-    filterFirestoreDataFrequency(wordtypeFreqVprep);
-  });
+  type = 'Verb + Prep';
 });
 
-export async function filtercountingGroupbytargettext() {
+export async function Sortbytargettext() {
+  //console.log(type);
   //const wordtype = WordTypeFreq;
   const citiesRef = collection(firestoreDB, "TargetText");
   const qCondition = query(citiesRef, orderBy("targetText"));
   const querySnapshot = await getDocs(qCondition);
-  console.log("All firestore order by targettext and wordtype how many document filter out: " + querySnapshot.size); // how many document filter out
+  console.log("Order by targettext how many document filter out: " + querySnapshot.size); // how many document filter out
   //clear
   //document.querySelector("#containerdis").innerHTML = "";
-  querySnapshot.forEach((doc) => {
-  
-   var eventdata = doc.data();
-   const id = doc.id;
-   const username = `${doc.data().name}`;
-   const type = `${doc.data().type}`;
-   const target = `${doc.data().targetText}`;
-   const example = `${doc.data().ExampleSentence}`;
-   const filterResultObj = { id,username,type,target };
-   //console.log("filtercouting"+ doc.id + username + type + target + example );
-   console.log(filterResultObj);
-});
+  const text = [];
 
+  querySnapshot.forEach((doc) => {
+    var eventdata = doc.data();
+
+    if (eventdata.type === type) {
+      text.push(eventdata);
+      text['id'] += doc.id + " ";
+    }
+  });
+  console.log(text['id'])
+
+  let frequency = {};
+
+  text.forEach(t => {
+    if (t.targetText in frequency) {
+      frequency[t.targetText] += 1;
+    } else {
+      frequency[t.targetText] = 1;
+
+    }
+
+  });
+
+  let sort = text.map(t => {
+    return [frequency[t.targetText], t];
+  })
+
+  sort.sort((a, b) => {
+    return b[0] - a[0];
+  })
+
+  const sorted = sort.map(s => {
+    return s[1];
+  })
+
+  sorted.forEach(s => {
+    //console.log(s)
+    var card = document.createElement("div");
+    card.setAttribute("class", "card bg-light mb-3");
+    card.setAttribute("id", "card-container");
+    card.setAttribute("style", "max-width: 70rem;");
+    document.querySelector("#containerdis").appendChild(card);
+
+    var cardheader = document.createElement("div");
+    cardheader.setAttribute("class", "card-header");
+    card.appendChild(cardheader);
+
+    var cardbody = document.createElement("div");
+    cardbody.setAttribute("class", "card-body");
+    card.appendChild(cardbody);
+
+    var cardtitle = document.createElement("h5");
+    cardtitle.setAttribute("class", "card-title");
+    document.querySelector(".card-body").appendChild(cardtitle);
+
+    var userName = document.createElement("h5");
+    var targettext = document.createElement("p");
+    var exampleSentence = document.createElement("p");
+    userName.innerHTML = "Username: " + s.name;
+    userName.addEventListener("click", () => {
+      // clear container
+      document.querySelector("#containerdis").innerHTML = "";
+    });
+    targettext.innerHTML = "TargetText: " + s.targetText;
+    exampleSentence.innerHTML = "Example Sentence: " + s.ExampleSentence; // added this
+
+    card.appendChild(cardheader);
+    card.appendChild(cardbody);
+    cardheader.appendChild(userName);
+    cardbody.appendChild(targettext);
+    cardbody.appendChild(exampleSentence);
+
+    //eventdata = doc.id;
+    card.addEventListener("click", () => {
+      window.location.assign("Comments.html" + "?targetTextId=" + s.id);
+    });
+    card.classList.add("text");
+
+  })
 }
-filtercountingGroupbytargettext();
+
+//Dynamic change button HTML content text FOR WORD TYPE
+var elements = document.getElementsByClassName("dropdown-item word");
+var myFunction = function () {
+  var attribute = this.getAttribute("id");
+  // document.getElementById("#dropdownWordType").innerText = " "+ attribute;
+  //alert(attribute);
+  document.getElementById('dropdownWordType').innerHTML = attribute;
+};
+
+for (var i = 0; i < elements.length; i++) {
+  elements[i].addEventListener('click', myFunction, false);
+}
+
+//Dynamic change button HTML content text FOR SORT BY CONDITION
+var elements = document.getElementsByClassName("dropdown-item sort");
+
+var myFunction = function () {
+  var attribute = this.getAttribute("data-link");
+  // document.getElementById("#dropdownWordType").innerText = " "+ attribute;
+  //alert(attribute);
+  document.getElementById('dropdownSortByCondition').innerHTML = attribute;
+};
+
+for (var i = 0; i < elements.length; i++) {
+  elements[i].addEventListener('click', myFunction, false);
+}

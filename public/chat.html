@@ -16,6 +16,7 @@
     <script type="module" defer="defer" src="/init-firebase.js"></script>
     <script type="module" async="async" src="/crud.js" crossorigin="anonymous"></script>
     <script type="module" async="async" src="/filter.js" crossorigin="anonymous"></script>
+    <script src="https://use.fontawesome.com/fe459689b4.js"></script>
 </head>
 
 <body>
@@ -29,33 +30,45 @@
                 <div class="card-header bg-transparent border-0 mb-4">
                     <div class="row gap-2 mb-4">
                         <div class="col">
-                            <button class="btn btn-md btn-primary" data-link="sortVerbNoun">Verb + Noun</button>
+                            <div class="dropdown">
+                                <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownWordType"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Word Type
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <button class="dropdown-item word" id="Verb+Noun" data-link="sortVerbNoun">Verb +
+                                        Noun</button>
+                                    <button class="dropdown-item word" id="Verb+Prep" data-link="sortVerbPrep">Verb +
+                                        Prep</button>
+                                    <button class="dropdown-item word" id="Verb+Adv" data-link="sortVerbAdv">Verb +
+                                        Adverb</button>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col">
-                            <button class="btn btn-md btn-primary" data-link="sortVerbPrep">Verb + Prep</button>
-                        </div>
-                        <div class="col">
-                            <button class="btn btn-md btn-primary" data-link="sortVerbAdv">Verb + Adverb</button>
-                        </div>
+
                         <div class="col">
                             <div class="dropdown">
-                                <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton"
-                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <button class="btn btn-primary dropdown-toggle" type="button"
+                                    id="dropdownSortByCondition" data-toggle="dropdown" aria-haspopup="true"
+                                    aria-expanded="false">
                                     Sort by
                                 </button>
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                    <button class="dropdown-item" data-link="sortUser">Sort by username</button>
-                                    <button class="dropdown-item" data-link="" >Sort by Most liked </button>
-                                    <button class="dropdown-item" data-link="">Sort by Most disliked</button>
-                                    <button class="dropdown-item" data-link="sortFrequency">Sort by frequency</button>
-                                    <button class="dropdown-item" data-link="">Sort by replies rate</button>
+                                    <button class="dropdown-item sort" data-link="sortUser">Sort by username</button>
+                                    <button class="dropdown-item sort" data-link="sortFrequency">Sort by
+                                        frequency</button>
+                                    <button class="dropdown-item sort" data-link="sortLike">Sort by Most liked </button>
+                                    <button class="dropdown-item sort" data-link="sortDislike">Sort by Most
+                                        disliked</button>
+                                    <button class="dropdown-item sort" data-link="sortReplies">Sort by replies
+                                        rate</button>
                                 </div>
-                            </div>               
+                            </div>
                         </div>
                     </div>
 
 
-                    <div class="container" id="containerdis">   
+                    <div class="container" id="containerdis">
                     </div>
                     <div class="container" id="container">
                     </div>

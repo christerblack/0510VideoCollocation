@@ -18,7 +18,9 @@ body {
   text-underline-position: under;
   cursor: pointer;
 }
-
+.Username  {
+  margin: 10px 200px 10px 10px !important;
+}
 .dot {
   height: 7px;
   width: 7px;
@@ -38,4 +40,56 @@ body {
 
 .card {
   width: 50rem;
+}
+
+.card-header {
+  display: flex;
+}
+
+button{
+  margin: 2px 2px;
+  cursor: pointer;
+  outline: 0;
+  color: #AAA;
+}
+.btn {
+  justify-content: flex-end;
+}
+
+.btn:focus {
+  outline: none;
+}
+
+.green{
+  color: green;
+}
+
+.red{
+  color: red;
+}
+
+/* button for like and disliked */
+.wrapper{
+  margin: 0 50px;
+  width: 50%;
+}
+
+.likes{
+  height: 50px;
+  float: left;
+  width: 50px;
+}
+
+.dislikes{ 
+  height: 50px;
+  float: right;
+  width: 50px;
+}
+
+#l-counter{
+  float: left;
+}
+
+#d-counter{
+  float: right;
 }

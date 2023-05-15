@@ -15,8 +15,9 @@
     <link rel="stylesheet" type="text/css"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
     <link rel="stylesheet" href="/css/comments.css" />
-    <script type="module" async="async" src="comment.js" crossorigin="anonymous"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script> 
     <script type="module" defer="defer" src="/init-firebase.js"></script>
+    <script type="module" async="async" src="/comment.js" crossorigin="anonymous"></script>
     <script type="module" async="async" src="/crud.js" crossorigin="anonymous"></script>
     <script type="module" async="async" src="/filter.js" crossorigin="anonymous"></script>
 </head>
@@ -43,9 +44,24 @@
                             <span>6 hours ago</span>
                         </div>
                     </div> -->
-                    <div class="card" id="card-container" >
+                    <div class="card" id="card-container">
                         <div class="card-header">
                             <h5 class="Username" id="username">Username: </h5>
+                            <div class="likes-counter">
+                                <button class="likes" id="like" onclick="liked(event)" ><i class="fa fa-thumbs-up fa-lg"
+                                        aria-hidden="true"></i></button>
+                                <div id="counterlike">10</div>
+                            </div>
+                            <div class="dislikes-counter">
+                                <button class="dislikes" id="dislike" onclick="disliked(event)"><i class="fa fa-thumbs-down fa-lg"
+                                        aria-hidden="true"></i></button>
+                                <div id="counterdislike">10</div>
+                            </div>
+
+                            <!-- <button class="btn" id="green"><i class="fa fa-thumbs-up fa-lg"
+                                    aria-hidden="true"></i></button>
+                            <button class="btn" id="red"><i class="fa fa-thumbs-down fa-lg"
+                                    aria-hidden="true"></i></button> -->
                         </div>
                         <div class="card-body">
                             <h5 class="card-title"></h5>
