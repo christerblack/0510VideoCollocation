@@ -432,11 +432,10 @@ export async function Sortbytargettext() {
     var eventdata = doc.data();
 
     if (eventdata.type === type) {
+      eventdata['id'] = doc.id;
       text.push(eventdata);
-      text['id'] += doc.id + " ";
     }
   });
-  console.log(text['id'])
 
   let frequency = {};
 

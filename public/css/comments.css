@@ -19,7 +19,7 @@ body {
   cursor: pointer;
 }
 .Username  {
-  margin: 10px 200px 10px 10px !important;
+  margin: 10px 150px 10px 10px !important;
 }
 .dot {
   height: 7px;
@@ -34,16 +34,24 @@ body {
   color: blue;
 }
 
+#replyandreply{
+  max-width: 60%;
+  border: 2px solid;
+}
+
 .hit-voting {
   cursor: pointer;
 }
 
 .card {
   width: 50rem;
+  word-wrap: normal !important;
 }
 
 .card-header {
   display: flex;
+  align-items: flex-start;
+  row-gap: 50px;
 }
 
 button{
@@ -60,11 +68,11 @@ button{
   outline: none;
 }
 
-.green{
+.likes:hover{
   color: green;
 }
 
-.red{
+.dislikes:hover{
   color: red;
 }
 

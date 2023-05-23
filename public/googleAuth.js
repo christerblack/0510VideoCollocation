@@ -44,7 +44,7 @@ export function googleSignInFunc() {
 }
 
 export function googleSignOutFunc() {
-    console.log("googleSignOutFunc");
+    //console.log("googleSignOutFunc");
     signOut(auth)
         .then(() => {
             // removeItem

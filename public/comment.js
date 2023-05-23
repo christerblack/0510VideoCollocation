@@ -1,6 +1,7 @@
-import { collection, getDocs, getDoc, getFirestore, doc, query, where } from "https://www.gstatic.com/firebasejs/9.16.0/firebase-firestore.js";
+import { collection, onSnapshot, getDocs, updateDoc, getDoc, getFirestore, doc, query, where } from "https://www.gstatic.com/firebasejs/9.16.0/firebase-firestore.js";
 
 import { app } from "/firebaseConfig.js";
+
 
 const firestoreDB = getFirestore(app);
 
@@ -10,6 +11,7 @@ var str = url.search;
 str = str.slice(14);
 //console.log(str);  // text id 
 filterFirestoreDataUser(str);
+//updateFirestoreData(str)
 
 export async function filterFirestoreDataUser(str) {
   const textid = str;
@@ -20,11 +22,12 @@ export async function filterFirestoreDataUser(str) {
   const querySnapshot = await getDoc(doc(firestoreDB, "TargetText", `${textid}`));
 
   if (querySnapshot.exists()) {
-    console.log(querySnapshot.data())
+    // console.log(querySnapshot.data())
   }
   else {
     console.log("No such document")
   }
+
   // clear
   //  document.querySelector("#containerdis").innerHTML = "";
 
@@ -71,83 +74,155 @@ export async function filterFirestoreDataUser(str) {
 
 }
 
-var btn1 = document.querySelector('#green');
-var btn2 = document.querySelector('#red');
 
-btn1.addEventListener('click', function () {
-
-  if (btn2.classList.contains('red')) {
-    btn2.classList.remove('red');
-  }
-  this.classList.toggle('green');
-
-});
-
-btn2.addEventListener('click', function () {
-
-  if (btn1.classList.contains('green')) {
-    btn1.classList.remove('green');
-  }
-  this.classList.toggle('red');
-
-});
-
-// // js for like and disliked
-// var lClicks = 0;
-// var dClicks = 0;
-
-// $(".likes").on("click", function(){
-// 	lClicks += 1;
-//     document.getElementById("l-counter").innerHTML = lClicks;
-// })
-
-// $(".dislikes").on("click", function(){
-// 	dClicks += 1;
-//     document.getElementById("d-counter").innerHTML = dClicks;
-// })
-
-// handle like and dislike 
+// // handle like and dislike 
 let like_flag = false;
- function liked(event) {
+function liked(event) {
+  var url_string = window.location.href;
+  var url = new URL(url_string);
+  var str = url.search;
+  str = str.slice(14);
   let counter = parseFloat(document.getElementById('counterlike').innerHTML);
   var button = event.target.innerText;
-  switch(button){
-  	case 'like':
-    	if (like_flag==false) {
-        counter++;
-        like_flag=true;
-     
-      } else {
-      	counter--;
-        like_flag=false;
-      }
-    break;
-  }
-  console.log('the button like '+button+' was pressed');
-  
-  document.getElementById('counterlike').innerHTML = counter;
+  var like = document.querySelector('#counterlike');
+  const likecount = like.textContent
+
+  let counter1 = parseFloat(document.getElementById('counterdislike').innerHTML);
+  var button1 = event.target.innerText;
+  var dislike = document.querySelector('#counterdislike');
+  const dislikecount = dislike.textContent
+
+  ++counter;
+
+  updateFirestoreData(str, likecount, dislikecount)
+
+  //realtimeupdate(str)
+  document.getElementById('counterlike').innerText = counter;
 }
 
 let dislike_flag = false;
- function disliked(event) {
-let counter1 = parseFloat(document.getElementById('counterdislike').innerHTML);
+function disliked(event) {
+  var url_string = window.location.href;
+  var url = new URL(url_string);
+  var str = url.search;
+  str = str.slice(14);
+  let counter = parseFloat(document.getElementById('counterlike').innerHTML);
+  var button = event.target.innerText;
+  var like = document.querySelector('#counterlike');
+  const likecount = like.textContent
+
+  let counter1 = parseFloat(document.getElementById('counterdislike').innerHTML);
   var button1 = event.target.innerText;
-  switch(button1){
-    case 'dislike':
-    	if (dislike_flag==false) {
-        counter1--;
-        dislike_flag=true;
-      }
-      else {
-      	counter1++;
-        dislike_flag=false;
-      }
-    break;
-  }
-  console.log('the button dislike '+button1+' was pressed');
-  
-  document.getElementById('counterdislike').innerHTML = counter1;
+  var dislike = document.querySelector('#counterdislike');
+  const dislikecount = dislike.textContent
+
+  ++counter1;
+
+  updateFirestoreData(str, likecount, dislikecount)
+
+
+  document.getElementById('counterdislike').innerText = counter1;
+  //realtimeupdate(str)
 }
-export { disliked,liked  };
-window.disliked= disliked;
-window.liked= liked;
+
+
+//updateFirestoreData 
+export async function updateFirestoreData(str, likecount, dislikecount) {
+  const textid = str;
+  const elm = likecount;
+  const elm1 = dislikecount;
+  //console.log(str);
+  //const user = localStorage.getItem("googleUser");
+  //const usernameUid = JSON.parse(user).uid;
+  //console.log(usernameUid)
+  const docRef = doc(firestoreDB, "TargetText", textid);
+  //const docSnap = await getDoc(docRef);
+
+  updateDoc(docRef, {
+    like: elm,
+    dislike: elm1,
+    timestamp: new Date().getTime(),
+    datetime: new Date(),
+  })
+
+  console.log("update finished");
+
+}
+
+export async function realtimeupdate(str) {
+  const textid = str;
+  //const elm = likecount;
+  //const elm1 = dislikecount;
+  //console.log(str);
+  //const user = localStorage.getItem("googleUser");
+  //const usernameUid = JSON.parse(user).uid;
+  //console.log(usernameUid)
+
+  const unsub = onSnapshot(doc(firestoreDB, "TargetText", textid), (doc) => {
+    console.log("Current data: ", doc.data().like, doc.data().dislike);
+
+    const like = doc.data().like
+    document.getElementById('counterlike').innerText = like;
+    document.getElementById('counterdislike').innerText = doc.data().dislike;
+  });
+
+  // const docRef = doc(firestoreDB, "TargetText", textid);
+  // const docSnap = await getDoc(docRef);
+
+  // updateDoc(docRef, {
+  //   like: elm,
+  //   dislike: elm1,
+  //   timestamp: new Date().getTime(),
+  //   datetime: new Date(),
+  // })
+
+  console.log("realtime update finished");
+}
+
+
+document.getElementById("comment")?.addEventListener("click", getcomment);
+function getcomment() {
+  $("#replycomment").removeAttr('style');
+  const textinput = document.querySelector('#TextInputField').value;
+  const user = localStorage.getItem("googleUser");
+  const usernameUid = JSON.parse(user).uid;
+  const username = JSON.parse(user).displayName;
+
+  console.log(textinput) 
+  //console.log(user)
+
+  document.querySelector('.mr-2').innerHTML = username; //comment-text-sm
+  document.querySelector('.comment-text-sm').innerHTML = textinput;
+  console.log(usernameUid)
+  console.log(username)
+
+  //document.querySelector('#TextInputField').value;
+  document.querySelector('#TextInputField').vallue = " ";
+}
+
+document.getElementById("replybutton")?.addEventListener("click", replyspanhtml);
+function replyspanhtml() {
+  // const textinput = document.querySelector('#TextInputField').value;
+  // const user = localStorage.getItem("googleUser");
+  // const usernameUid = JSON.parse(user).uid;
+  // const username = JSON.parse(user).displayName;
+
+  // console.log(textinput) 
+  // //console.log(user)
+
+  // document.querySelector('.mr-2').innerHTML = username; //comment-text-sm
+  // document.querySelector('.comment-text-sm').innerHTML = textinput;
+  // console.log(usernameUid)
+  // console.log(username)
+
+  // //document.querySelector('#TextInputField').value;
+  // document.querySelector('#TextInputField').vallue = " ";
+  $("#replyandreply").removeAttr('style');
+  console.log("work!")
+
+}
+
+
+
+window.disliked = disliked;
+window.liked = liked;
