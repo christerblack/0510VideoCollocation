@@ -81,42 +81,6 @@
         </div>
     </nav>
 
-    <!-- <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container-fluid">
-          <a class="navbar-brand" href="#">Navbar</a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-            <div class="navbar-nav">
-              <a class="nav-link active" aria-current="page" href="#">Home</a>
-              <a class="nav-link" href="#">Features</a>
-              <a class="nav-link" href="#">Pricing</a>
-              <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-            </div>
-          </div>
-        </div>
-      </nav> -->
-
-
-    <!-- <nav>
-        <p class="usernameHomepage" id="googleUserName"></p>
-        <a class="button" href="chat.html">Collocation Review Board</a>
-        <button type="button" class="google-signin" id="google-sign-out">Sign Out with Google</button>
-    </nav> -->
-
-    <!-- <div class="container">
-        <button class="buttonvideo" id="button1" onclick=loadVideoandsrt(this) data-video="1_1.mp4"
-            datasrt="0101.srt">Video Ep1</button>
-        <button class="buttonvideo" id="button2" onclick=loadVideoandsrt(this) data-video="1_2.mp4"
-            datasrt="0102.srt">Video Ep2</button>
-        <button class="buttonvideo" id="button3" onclick=loadVideoandsrt(this) data-video="1_3.mp4"
-            datasrt="0103.srt">Video Ep3</button>
-        <button class="buttonvideo" id="button4" onclick=loadVideoandsrt(this) data-video="1_4.mp4"
-            datasrt="0104.srt">Video Ep4</button>
-        <button class="buttonvideo" id="button5" onclick=loadVideoandsrt(this) data-video="1_5.mp4"
-            datasrt="0105.srt">Video Ep5</button>
-    </div> -->
     <div class="container-fluid">
         <div class="container" id="video_container">
             <video controls src="" width="100%" id="video1">
@@ -255,23 +219,13 @@
             //document.querySelector("#googleCredential").textContent = JSON.stringify(JSON.parse(credential), undefined, 4);
             //document.querySelector("#googleToken").textContent = token;
             //document.querySelector("#googleUser").textContent = JSON.stringify(JSON.parse(user), undefined, 4);
-            document.querySelector("#googleUserName").textContent += JSON.parse(user).displayName;
+            const HomepageUsername = " "+JSON.parse(user).displayName
+            document.querySelector("#googleUserName").textContent += HomepageUsername;
         }
 
         window.onload = () => {
             homeInit();
         };
-
-        var navbarTogglerIcon = document.getElementsByClassName('navbar-toggler');
-        var navbarcontain = document.getElementsByClassName("collapse navbar-collapse");
-        //collapse navbar-collapse
-        navbarTogglerIcon?.addEventListener("click", function (e) {
-            console.log("clicked")
-        });
-        $(".navbar-toggler collapsed").click(function () {
-            console.log($("nav").height());
-        })
-
 
     </script>
     <script type="module" async="async" src="/modal.js" crossorigin="anonymous"></script>

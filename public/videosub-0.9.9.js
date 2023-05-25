@@ -61,7 +61,7 @@
         return secs;
     }
 
-    document.querySelectorAll('.nav-item_buttonvideo').forEach(occurence => {
+    document.querySelectorAll('.buttonvideo').forEach(occurence => {
         let id = occurence.getAttribute('id');
         occurence.addEventListener('click', function () {
             console.log('A button with ID ' + id + ' was clicked!')

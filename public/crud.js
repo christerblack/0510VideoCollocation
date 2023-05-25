@@ -61,7 +61,6 @@ async function updateFirestoreData(TargetWord,wordType,translateWord,ExampleSen)
   const text_KEY = `${TargetWord}`;
   const user = localStorage.getItem("googleUser");
   const usernameUid = JSON.parse(user).uid;
-  console.log(usernameUid)
   const q = query(collection(firestoreDB, "TargetText"), where("targetText", "==", text_KEY));
     const querySnapshot = await getDocs(q);
     querySnapshot.docs.map((doc) => 

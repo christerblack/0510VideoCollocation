@@ -12,9 +12,12 @@ function openModal(e) {
   $(`#exampleModal`).css("display", "block");
 
   $("#exampleModal .modal-title").text("Create Annotation"); // `${dataId}` + 
-  $("#exampleModal .modal-body p").text(dbtarget);
-  $("#exampleModal .modal-body p:nth-child(2)").text(dborigin);
-  
+  $("#exampleModal .modal-body p").text("Target Text: "+ dbtarget);
+  $(`#exampleModal .modal-body p`).css("font-weight", "bold");
+  $(`#exampleModal .modal-body p`).css("font-size", "1.3rem"); 
+  $("#exampleModal .modal-body p:nth-child(2)").text("Original Sentence: "+ dborigin);
+  $(`#exampleModal .modal-body p:nth-child(2)`).css("font-weight", "bold"); 
+  $(`#exampleModal .modal-body p:nth-child(2)`).css("font-size", "1.3rem");
 }
 
 //onclick='openModal(this)'
@@ -39,25 +42,8 @@ function submitModal(modalID) {
   // Get Checked Radio Button From Modal Body
   const modalBodyCheckedRadioBtn = $(`#${modalID} .modal-body input[name="inlineRadioOptions"]:checked`).val();
 
-  // Here print out all data
-  /*
-  console.log({ modalTitleVal });
-  console.log({ modalBodyTextVal });
-  console.log({ modalBodyTranslateInputVal });
-  console.log({ modalBodyGiveAnExampleInputVal });
-  console.log({ modalBodyCheckedRadioBtn });
-  */
-
-  /**
-   * Now we can get all data
-   * Let make it to object
-   */
   const modalResultObj = { modalTitleVal, modalBodyTextVal, modalBodyTranslateInputVal, modalBodyGiveAnExampleInputVal, modalBodyCheckedRadioBtn };
-  //console.log(modalResultObj);
-  /**
-   * Now we have result object
-   * then we need to submit it to firestore.
-   */
+
   updateFirestoreData(modalBodyTextVal,modalBodyCheckedRadioBtn,modalBodyTranslateInputVal,modalBodyGiveAnExampleInputVal);
   // Close Modal
 

@@ -29,7 +29,7 @@ document.addEventListener("drag", (event) => {
       console.error({ err });
     });
 
-  createspan(target_text);
+ // createspan(target_text);
   let origin_text = document.getElementById("text_english").textContent;
   createbutton(target_text, origin_text);
 });
@@ -40,10 +40,55 @@ target.addEventListener("dragover", (event) => {
   event.preventDefault();
 });
 
-function createspan(target_text) {
+// function createspan(target_text) {
+//   let video_time = document.getElementById("video1");
+//   let videotimemin = Math.floor(video_time.currentTime / 60);
+//   let videotimesc = Math.floor(video_time.currentTime % 60);
+
+//   let text2 = document.getElementById("text_english");
+//   let b = text2.innerHTML;
+//   let c = "<fa id='targetText' style='color: red;'>" + target_text + "</fa>";
+//   var str = b;
+//   var newstr = str.replace(target_text, c);
+//   text2.innerHTML = newstr;
+
+//   const newlist =
+//     "<div class='dropzoneid' id='dict12' style='display: flex; padding:10px 10px' >" +
+//     "<a href='javascript:void(0)' class='go-back-video-timer-btn'>" +
+//     videotimemin +
+//     ":" +
+//     videotimesc +
+//     "</a>" +
+//     "<p id='collocationtargetword' >" +
+//     target_text +
+//     "</p>" +
+//     "</div>";
+//   $("#dict")[0].insertAdjacentHTML("beforeend", newlist);
+
+//   let timer = document.querySelectorAll(".go-back-video-timer-btn");
+
+//   for (let i = 0; i < timer.length; i++) {
+//     timer[i].addEventListener("click", function (e) {
+//       const goBackVideoTimer = e.target.text;
+
+//       console.log(goBackVideoTimer);
+//       const splitStr = goBackVideoTimer.split(":");
+//       const min = parseInt(splitStr[0]); // min = number
+//       const sec = parseInt(splitStr[1]); // sec = number
+
+//       let minutetosec = min * 60;
+//       let totalsec = parseInt(minutetosec + sec);
+
+//       document.getElementById("video1").currentTime = totalsec;
+//     });
+//   }
+// }
+
+function createbutton(target_text, origin_text) {
   let video_time = document.getElementById("video1");
   let videotimemin = Math.floor(video_time.currentTime / 60);
   let videotimesc = Math.floor(video_time.currentTime % 60);
+  //console.log(toHoursAndMinutes(video_time.currentTime/60));
 
   let text2 = document.getElementById("text_english");
   let b = text2.innerHTML;
@@ -51,6 +96,10 @@ function createspan(target_text) {
   var str = b;
   var newstr = str.replace(target_text, c);
   text2.innerHTML = newstr;
+    
+   // createbutton
+   let text = target_text.toString();
+   let origin = origin_text.trim().toString();
 
   const newlist =
     "<div class='dropzoneid' id='dict12' style='display: flex; padding:10px 10px' >" +
@@ -62,7 +111,8 @@ function createspan(target_text) {
     "<p id='collocationtargetword' >" +
     target_text +
     "</p>" +
-    "</div>";
+    `<button class="btn btn-md btn-success m-2" onclick='openModal(this)' data-id="${Math.floor(Math.random() * 100000)}" data-target-text="${text}" data-origin-text="${origin}">Edit Btn</button>`;
+    + "</div>";
   $("#dict")[0].insertAdjacentHTML("beforeend", newlist);
 
   let timer = document.querySelectorAll(".go-back-video-timer-btn");
@@ -82,15 +132,21 @@ function createspan(target_text) {
       document.getElementById("video1").currentTime = totalsec;
     });
   }
-}
+  
+  // const list ="<a href='javascript:void(0)' class='go-back-video-timer-btn'>" +
+  //   videotimemin +
+  //   ":" +
+  //   videotimesc +
+  //   "</a>";
+  //   $("#modaltimestamp")[0].insertAdjacentHTML("beforeend", list);
+  
+  // createbutton
+  // let text = target_text.toString();
+  // let origin = origin_text.trim().toString();
 
-function createbutton(target_text, origin_text) {
-  let text = target_text.toString();
-  let origin = origin_text.trim().toString();
-  // console.log("dshdsj"+text);
 
-  const listHTML = `<button class="btn btn-md btn-success m-2" onclick='openModal(this)' data-id="${Math.floor(Math.random() * 100000)}" data-target-text="${text}" data-origin-text="${origin}">Edit Btn</button>`;
-  $("#dict")[0].insertAdjacentHTML("beforeend", listHTML);
+  // const listHTML = `<button class="btn btn-md btn-success m-2" onclick='openModal(this)' data-id="${Math.floor(Math.random() * 100000)}" data-target-text="${text}" data-origin-text="${origin}">Edit Btn</button>`;
+  // $('.dropzone')[0].insertAdjacentHTML("beforeend", listHTML);
 }
 
 target.addEventListener("drop", (event) => {
