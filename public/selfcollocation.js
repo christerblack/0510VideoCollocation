@@ -1,6 +1,6 @@
 import { all } from "./crud.js";
 
-function loadalldata(e) {
+function loadalldata() {
  // console.log(e);
   all();
 }
