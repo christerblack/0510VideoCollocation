@@ -32,7 +32,7 @@ export function googleSignInFunc() {
             //console.log(token);
             //console.log(user);
             //console.log(user.uid + user.displayName);
-            window.location.href = "home.html";
+            window.location.href = "home1.html";
             createFirestoreData(user.uid, user.displayName);
         })
         .catch((error) => {

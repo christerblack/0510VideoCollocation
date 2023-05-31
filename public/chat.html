@@ -15,11 +15,36 @@
     <link rel="stylesheet" href="/css/chat.css">
     <script type="module" defer="defer" src="/init-firebase.js"></script>
     <script type="module" async="async" src="/crud.js" crossorigin="anonymous"></script>
+    <script type="module" async="async" src="/chat.js" crossorigin="anonymous"></script>
     <script type="module" async="async" src="/filter.js" crossorigin="anonymous"></script>
     <script src="https://use.fontawesome.com/fe459689b4.js"></script>
+
+    <style>
+        /* Absolute Center Spinner */
+        .loading {
+            /* position: fixed;
+            z-index: 999;
+            height: 2em;
+            width: 2em;
+            overflow: visible;
+            margin: auto;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            */
+            /* position: fixed; */
+            margin: auto;
+            width: 100px;
+            height: 100px;
+            z-index: 9999;
+            background: url(//upload.wikimedia.org/wikipedia/commons/thumb/e/e5/Phi_fenomeni.gif/50px-Phi_fenomeni.gif) 50% 50% no-repeat;
+
+        }
+    </style>
 </head>
 
-<body>
+<body onload="firebaseonloadALL()">
     <!-- <div class="card">
         
     </div> -->
@@ -29,10 +54,9 @@
             <div class="card">
                 <div class="card-header bg-transparent border-0 mb-4">
                     <div class="row gap-2 mb-4">
-                        <div class="col">
+                        <div class="col ml-4">
                             <div class="dropdown">
-                                <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownWordType"
-                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownWordType" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     Word Type
                                 </button>
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -68,7 +92,9 @@
                     </div>
 
 
+
                     <div class="container" id="containerdis">
+                        <!-- <div class="loading" id="load'" ></div> -->
                     </div>
                     <div class="container" id="container">
                     </div>
@@ -195,6 +221,21 @@
                 crossorigin="anonymous">
                 </script>
 
+            <script>
+                // $('.dropdown-item word').on('click', function () {
+                //     $(`#load`).css("display", "block")
+                // });
+                // document.onreadystatechange = function () {
+                //     // page fully load
+                //     if (document.readyState == "complete") {
+                //         // hide loader after 2 seconds
+                //         setTimeout(function () {
+                //             $(`#load`).css("display", "none")
+                //         }, 2000);
+                //     }
+                // }
+            </script>
+       
             <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"></script>
 

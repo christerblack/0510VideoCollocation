@@ -6,13 +6,14 @@ document.addEventListener("drag", (event) => {
   event.preventDefault();
 
   let target_text = window.getSelection().toString();
+  let text = target_text.trim().toString();
   // console.log(event);
 
   //localStorage.clear();
 
-  window.localStorage.setItem("targetText", target_text); // 同步的问题 我存到旧的 而不是最新的那一笔资料
-  if (target_text.length > 0 && target_text !== "undefined") {
-    createFirestoreData(target_text)
+  window.localStorage.setItem("targetText", text); // 同步的问题 我存到旧的 而不是最新的那一笔资料
+  if (text.length > 0 && text !== "undefined") {
+    createFirestoreData(text)
       .then(() => {
         console.log("save successful");
       })
@@ -21,7 +22,7 @@ document.addEventListener("drag", (event) => {
       });
   }
 
-  readFirestoreData(target_text)
+  readFirestoreData(text)
     .then(() => {
       console.log("read successful");
     })
@@ -29,9 +30,9 @@ document.addEventListener("drag", (event) => {
       console.error({ err });
     });
 
- // createspan(target_text);
+  // createspan(target_text);
   let origin_text = document.getElementById("text_english").textContent;
-  createbutton(target_text, origin_text);
+  createbutton(text, origin_text);
 });
 
 const target = document.getElementById("dict");
@@ -40,54 +41,13 @@ target.addEventListener("dragover", (event) => {
   event.preventDefault();
 });
 
-// function createspan(target_text) {
-//   let video_time = document.getElementById("video1");
-//   let videotimemin = Math.floor(video_time.currentTime / 60);
-//   let videotimesc = Math.floor(video_time.currentTime % 60);
-
-//   let text2 = document.getElementById("text_english");
-//   let b = text2.innerHTML;
-//   let c = "<fa id='targetText' style='color: red;'>" + target_text + "</fa>";
-//   var str = b;
-//   var newstr = str.replace(target_text, c);
-//   text2.innerHTML = newstr;
-
-//   const newlist =
-//     "<div class='dropzoneid' id='dict12' style='display: flex; padding:10px 10px' >" +
-//     "<a href='javascript:void(0)' class='go-back-video-timer-btn'>" +
-//     videotimemin +
-//     ":" +
-//     videotimesc +
-//     "</a>" +
-//     "<p id='collocationtargetword' >" +
-//     target_text +
-//     "</p>" +
-//     "</div>";
-//   $("#dict")[0].insertAdjacentHTML("beforeend", newlist);
-
-//   let timer = document.querySelectorAll(".go-back-video-timer-btn");
-
-//   for (let i = 0; i < timer.length; i++) {
-//     timer[i].addEventListener("click", function (e) {
-//       const goBackVideoTimer = e.target.text;
-
-//       console.log(goBackVideoTimer);
-//       const splitStr = goBackVideoTimer.split(":");
-//       const min = parseInt(splitStr[0]); // min = number
-//       const sec = parseInt(splitStr[1]); // sec = number
-
-//       let minutetosec = min * 60;
-//       let totalsec = parseInt(minutetosec + sec);
-
-//       document.getElementById("video1").currentTime = totalsec;
-//     });
-//   }
-// }
 
 function createbutton(target_text, origin_text) {
   let video_time = document.getElementById("video1");
   let videotimemin = Math.floor(video_time.currentTime / 60);
+  let videotimeminchange = pad(videotimemin)
   let videotimesc = Math.floor(video_time.currentTime % 60);
+  let videotimescchange = pad(videotimesc)
   //console.log(toHoursAndMinutes(video_time.currentTime/60));
 
   let text2 = document.getElementById("text_english");
@@ -96,23 +56,28 @@ function createbutton(target_text, origin_text) {
   var str = b;
   var newstr = str.replace(target_text, c);
   text2.innerHTML = newstr;
-    
-   // createbutton
-   let text = target_text.toString();
-   let origin = origin_text.trim().toString();
+
+  function pad(d) {
+    return (d < 10) ? '0' + d.toString() : d.toString();
+  }
+
+
+  // createbutton
+  let text = target_text.trim().toString();
+  let origin = origin_text;
 
   const newlist =
-    "<div class='dropzoneid' id='dict12' style='display: flex; padding:10px 10px' >" +
+    "<div class='dropzoneid' id='dict12' style='padding:10px 10px' >" +
     "<a href='javascript:void(0)' class='go-back-video-timer-btn'>" +
-    videotimemin +
+    videotimeminchange +
     ":" +
-    videotimesc +
+    videotimescchange +
     "</a>" +
     "<p id='collocationtargetword' >" +
     target_text +
     "</p>" +
-    `<button class="btn btn-md btn-success m-2" onclick='openModal(this)' data-id="${Math.floor(Math.random() * 100000)}" data-target-text="${text}" data-origin-text="${origin}">Edit Btn</button>`;
-    + "</div>";
+    `<button class="btn btn-md btn-success m-2"  onclick='openModal(this)' data-id="${Math.floor(Math.random() * 100000)}" data-target-text="${text}" data-origin-text="${origin}">Edit Btn</button>`;
+  + "</div>";
   $("#dict")[0].insertAdjacentHTML("beforeend", newlist);
 
   let timer = document.querySelectorAll(".go-back-video-timer-btn");
@@ -129,25 +94,17 @@ function createbutton(target_text, origin_text) {
       let minutetosec = min * 60;
       let totalsec = parseInt(minutetosec + sec);
 
-      document.getElementById("video1").currentTime = totalsec;
+      document.getElementById("video1").currentTime = totalsec - 5; // getting back to 5 seconds early
     });
   }
-  
-  // const list ="<a href='javascript:void(0)' class='go-back-video-timer-btn'>" +
-  //   videotimemin +
-  //   ":" +
-  //   videotimesc +
-  //   "</a>";
-  //   $("#modaltimestamp")[0].insertAdjacentHTML("beforeend", list);
-  
-  // createbutton
-  // let text = target_text.toString();
-  // let origin = origin_text.trim().toString();
-
-
-  // const listHTML = `<button class="btn btn-md btn-success m-2" onclick='openModal(this)' data-id="${Math.floor(Math.random() * 100000)}" data-target-text="${text}" data-origin-text="${origin}">Edit Btn</button>`;
-  // $('.dropzone')[0].insertAdjacentHTML("beforeend", listHTML);
 }
+/**
+ * doesn't need the videostamp in modal becoz the video is 
+ * depend to the modal identical go back to video timestamp 
+ * 
+ * 
+ * 
+ */
 
 target.addEventListener("drop", (event) => {
   // prevent default action (open as link for some elements)
@@ -168,6 +125,7 @@ submitbutton.forEach(box => {
 
   });
 });
+
 /*
     document.addEventListener("dragstart", (event) => {
         // store a ref. on the dragged elem

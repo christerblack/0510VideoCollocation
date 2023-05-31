@@ -90,12 +90,16 @@
       margin-bottom: 10px;
     }
 
-    .col-6 {
+    .collocation-wrapper {
       border-color: black;
       border-style: solid;
       border-radius: 2px;
-      min-height: 500px;
+      min-height: 550px;
       min-width: 70px;
+      width: fit-content;
+    }
+    #dict{
+      border-top-style: solid;
     }
 
     .SearchingInput {
@@ -108,26 +112,32 @@
     }
 
     .dropzoneid {
-      border-style: solid;
+      border-bottom-style: solid;
       border-radius: 1px;
       border-color: rgb(85, 81, 81);
-
+      display: inline-flex;
+      padding: 10px 10px;
+      width: 100%;
+      justify-content: space-around;
     }
 
     .modal-body p {
       font-weight: bold;
     }
 
-    .labelTypes {
-      display: block;
-      margin-top: 1em;
-    }
-
     .req {
       color: red;
       font-size: 21px;
-    
     }
+
+    /* modal css */
+    #TargetText {
+    display: inline-flex;
+    padding-left: 5px;
+    font-weight: bold;
+    font-size: 1.3rem;
+    }
+
   </style>
 </head>
 
@@ -186,7 +196,7 @@
     <!-- Main component for a primary marketing message or call to action -->
     <div class="row no-gutters">
       <div class="col-12 col-sm-6 col-md-8">
-        <video controls src="1_1.mp4" class="video" id="video1" autoplay>
+        <video controls src="" class="video" id="video1" autoplay>
           <track src="0101.srt" default kind="subtitle" srclang="en" label="English" id="srtSrc1">
         </video>
       </div>
@@ -194,7 +204,6 @@
         <div class="collocation-wrapper">
           <h2 style="padding-left: 10px">Vocabulary Collocation List</h2>
           <div class="dropzone" id="dict">
-            <br />
           </div>
         </div>
         <!-- .col-6 .col-md-4 -->
@@ -208,14 +217,15 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title">Modal title</h5>
+          <h5 class="modal-title" id="modalTitle"></h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
             onclick="closeModal('exampleModal')"></button>
         </div>
         <div class="modal-body">
-          <p class="modalbodytext">Target Text: </p>
-          <!-- <p class="modalbodytext" id="modaltimestamp">Timestamp: </p> -->
-          <p class="modalbodytext">Original Sentence: </p>
+          <label class="labelTypes" for="name">Target Text: </label>
+          <p class="modalbodytext" id="TargetText"></p>
+          <label class="labelTypes" for="name" style="display: block;">Original Sentence: </label>
+          <p class="modalbodytext" id="Original"></p>
           <hr>
           <div class="SearchingInput">
             <div class="search-container">
@@ -242,9 +252,9 @@
                 <label class="labelTypes" for="name">Choose Collocation Types: <span class="req">*</span></label>
                 <div class="input-group mt-2">
                   <div class="form-check form-check-inline">
-                    
+
                     <input class="form-check-input" type="radio" name="inlineRadioOptions" id="Verb-Adv"
-                      value="Verb + Noun" />
+                      value="Verb + Noun"/>
                     <label class="form-check-label" for="Verb-Adv">Verb + Noun</label>
                   </div>
                   <div class="form-check form-check-inline">
@@ -284,8 +294,7 @@
 
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" onclick="closeModal('exampleModal')">Close</button>
-          <button type="button" class="btn btn-primary" onclick="submitModal('exampleModal')">Submit
-            and Share</button>
+          <button type="button" class="btn btn-primary" onclick="submitModal('exampleModal')">Submit and Share</button>
         </div>
       </div>
     </div>

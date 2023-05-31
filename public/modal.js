@@ -12,10 +12,10 @@ function openModal(e) {
   $(`#exampleModal`).css("display", "block");
 
   $("#exampleModal .modal-title").text("Create Annotation"); // `${dataId}` + 
-  $("#exampleModal .modal-body p").text("Target Text: "+ dbtarget);
+  $("#exampleModal #TargetText").text(dbtarget);
   $(`#exampleModal .modal-body p`).css("font-weight", "bold");
   $(`#exampleModal .modal-body p`).css("font-size", "1.3rem"); 
-  $("#exampleModal .modal-body p:nth-child(2)").text("Original Sentence: "+ dborigin);
+  $("#exampleModal #Original").text(dborigin);
   $(`#exampleModal .modal-body p:nth-child(2)`).css("font-weight", "bold"); 
   $(`#exampleModal .modal-body p:nth-child(2)`).css("font-size", "1.3rem");
 }
@@ -33,7 +33,7 @@ function submitModal(modalID) {
   
   // Get Data From Input form.
   const modalTitleVal = $(`#${modalID} .modal-title`).text(); // modal edit button id value
-  const modalBodyTextVal = $(`#${modalID} .modal-body p:nth-child(1)`).text(); //target_text
+  const modalBodyTextVal = $(`#${modalID} #TargetText`).text(); //target_text
 
   // Get Input Value From Modal body
   const modalBodyTranslateInputVal = $(`#${modalID} .modal-body #translate`).val();
@@ -43,11 +43,10 @@ function submitModal(modalID) {
   const modalBodyCheckedRadioBtn = $(`#${modalID} .modal-body input[name="inlineRadioOptions"]:checked`).val();
 
   const modalResultObj = { modalTitleVal, modalBodyTextVal, modalBodyTranslateInputVal, modalBodyGiveAnExampleInputVal, modalBodyCheckedRadioBtn };
-
+  
   updateFirestoreData(modalBodyTextVal,modalBodyCheckedRadioBtn,modalBodyTranslateInputVal,modalBodyGiveAnExampleInputVal);
   // Close Modal
-
-
+  
   closeModal(modalID);
   $('#give-an-example').val('');
   $('#translate').val('');
