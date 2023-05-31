@@ -7,9 +7,6 @@ const firestoreDB = getFirestore(app);
 // Filter data username
 export async function filterFirestoreDataUser(WordTypeUser) {
   const wordtype = WordTypeUser;
-  //const userna = username; //google uid
-  //const displayna = displayname; // christer
-  //const doc = this.doc;
   const citiesRef = collection(firestoreDB, "TargetText");
   const qCondition = query(citiesRef, wordtype, orderBy("name"));
   const querySnapshot = await getDocs(qCondition);
@@ -23,6 +20,7 @@ export async function filterFirestoreDataUser(WordTypeUser) {
     const type = `${doc.data().type}`;
     const target = `${doc.data().targetText}`;
     const example = `${doc.data().ExampleSentence}`;
+    const origin = `${doc.data().originText}`;
     //const filterResultObj = { username, example };
     var card = document.createElement("div");
     card.setAttribute("class", "card bg-light border-dark mb-3");
@@ -45,15 +43,18 @@ export async function filterFirestoreDataUser(WordTypeUser) {
     var userName = document.createElement("h5");
     var targettext = document.createElement("p");
     var exampleSentence = document.createElement("p");
+    var originSentence = document.createElement("p");
     userName.innerHTML = "Username: " + username;
     targettext.innerHTML = "TargetText: " + target;
     exampleSentence.innerHTML = "Example Sentence: " + example; // added this
+    originSentence.innerHTML = "Origin Sentence: " + origin;
 
     card.appendChild(cardheader);
     card.appendChild(cardbody);
     cardheader.appendChild(userName);
     cardbody.appendChild(targettext);
     cardbody.appendChild(exampleSentence);
+    cardbody.appendChild(originSentence);
     //console.log(eventdata);
     //console.log(filterResultObj);
     card.addEventListener("click", () => {
@@ -80,7 +81,8 @@ export async function filterFirestoreDataFrequency(WordTypeFreq) {
     const type = `${doc.data().type}`;
     const target = `${doc.data().targetText}`;
     const example = `${doc.data().ExampleSentence}`;
-    //const filterResultObj = { username, example };
+    const origin = `${doc.data().originText}`;
+
     var card = document.createElement("div");
     card.setAttribute("class", "card bg-light border-dark mb-3");
     card.setAttribute("id", "card-container");
@@ -105,14 +107,15 @@ export async function filterFirestoreDataFrequency(WordTypeFreq) {
     userName.innerHTML = "Username: " + username;
     targettext.innerHTML = "TargetText: " + target;
     exampleSentence.innerHTML = "Example Sentence: " + example; // added this
+    originSentence.innerHTML = "Origin Sentence: " + origin;
 
     card.appendChild(cardheader);
     card.appendChild(cardbody);
     cardheader.appendChild(userName);
     cardbody.appendChild(targettext);
     cardbody.appendChild(exampleSentence);
-    //console.log(eventdata);
-    //console.log(filterResultObj);
+    cardbody.appendChild(originSentence);
+
     card.addEventListener("click", () => {
       window.location.assign("Comments.html" + "?targetTextId=" + doc.id);
     });
@@ -122,8 +125,7 @@ export async function filterFirestoreDataFrequency(WordTypeFreq) {
 
 // Filter data Verb+Noun
 export async function filterFirestoreDataVN() {
-  //const userna = username;
-  //const displayna = displayname;
+ 
   const citiesRef = collection(firestoreDB, "TargetText");
   const VN = query(citiesRef, where("type", "==", "Verb + Noun"));
   const querySnapshot1 = await getDocs(VN);
@@ -133,12 +135,12 @@ export async function filterFirestoreDataVN() {
   const allEventData = [];
   querySnapshot1.forEach((doc) => {
     var eventdata = doc.data();
-    //console.log("abc>>"+doc.id + doc.data())
+  
     allEventData.push(eventdata);
     const username = `${doc.data().name}`;
     const target = `${doc.data().targetText}`;
     const example = `${doc.data().ExampleSentence}`;
-    //const filterResultObj = { username, example };
+    const origin = `${doc.data().originText}`;
 
     var card = document.createElement("div");
     card.setAttribute("class", "card bg-light mb-3");
@@ -161,54 +163,24 @@ export async function filterFirestoreDataVN() {
     var userName = document.createElement("h5");
     var targettext = document.createElement("p");
     var exampleSentence = document.createElement("p");
+    var originSentence = document.createElement("p");
+
     userName.innerHTML = "Username: " + username;
     userName.addEventListener("click", () => {
       // clear container
       document.querySelector("#containerdis").innerHTML = "";
-      // render user's text
-      // const userEventData = allEventData.filter((text) => text.useruid === eventdata.useruid);
-      // userEventData.forEach((text) => {
-      //   // card
-      //   let card = document.createElement('div');
-      //   card.setAttribute('class', 'card bg-light mb-3');
-      //   card.setAttribute('id', 'card-container');
-      //   card.setAttribute('style', 'max-width: 70rem;');
-      //   document.querySelector("#containerdis").appendChild(card);
-
-      //   let userName = document.createElement('h5');
-      //   userName.innerHTML = "Username: " + text.name;
-
-      //   let targettext = document.createElement('p');
-      //  // targettext.innerHTML = "TargetText: " + text.targetText;
-
-      //   let exampleSentence = document.createElement('p');
-      //  /// exampleSentence.innerHTML = "Example Sentence: " + text.ExampleSentence; // added this
-
-      //   let cardheader = document.createElement('div');
-      //   cardheader.setAttribute('class', 'card-header');
-      //   card.appendChild(cardheader);
-
-      //   let cardbody = document.createElement('div');
-      //   cardbody.setAttribute('class', 'card-body');
-      //   card.appendChild(cardbody);
-
-      //   let cardtitle = document.createElement('h5');
-      //   cardtitle.setAttribute('class', 'card-title');
-      //   document.querySelector(".card-body").appendChild(cardtitle);
-
-      //   cardheader.appendChild(userName);
-      //   cardbody.appendChild(targettext);
-      //   cardbody.appendChild(exampleSentence);
-      // })
+      
     });
     targettext.innerHTML = "TargetText: " + target;
     exampleSentence.innerHTML = "Example Sentence: " + example; // added this
+    originSentence.innerHTML = "Origin Sentence: " + origin;
 
     card.appendChild(cardheader);
     card.appendChild(cardbody);
     cardheader.appendChild(userName);
     cardbody.appendChild(targettext);
     cardbody.appendChild(exampleSentence);
+    cardbody.appendChild(originSentence);
 
     card.addEventListener("click", () => {
       window.location.assign("Comments.html" + "?targetTextId=" + doc.id);
@@ -235,6 +207,7 @@ export async function filterFirestoreDataVPrep() {
     const username = `${doc.data().name}`;
     const target = `${doc.data().targetText}`;
     const example = `${doc.data().ExampleSentence}`;
+    const origin = `${doc.data().originText}`;
     //const filterResultObj = { username, example };
 
     var card = document.createElement("div");
@@ -258,6 +231,7 @@ export async function filterFirestoreDataVPrep() {
     var userName = document.createElement("h5");
     var targettext = document.createElement("p");
     var exampleSentence = document.createElement("p");
+    var originSentence = document.createElement("p");
     userName.innerHTML = "Username: " + username;
     userName.addEventListener("click", () => {
       // clear container
@@ -265,13 +239,15 @@ export async function filterFirestoreDataVPrep() {
     });
     targettext.innerHTML = "TargetText: " + target;
     exampleSentence.innerHTML = "Example Sentence: " + example; // added this
+    originSentence.innerHTML = "Origin Sentence: " + origin;
 
     card.appendChild(cardheader);
     card.appendChild(cardbody);
     cardheader.appendChild(userName);
     cardbody.appendChild(targettext);
     cardbody.appendChild(exampleSentence);
-
+    cardbody.appendChild(originSentence);
+    
     card.addEventListener("click", () => {
       window.location.assign("Comments.html" + "?targetTextId=" + doc.id);
     });
@@ -297,6 +273,7 @@ export async function filterFirestoreDataVAdv() {
     const username = `${doc.data().name}`;
     const target = `${doc.data().targetText}`;
     const example = `${doc.data().ExampleSentence}`;
+    const origin = `${doc.data().originText}`;
     //const filterResultObj = { username, example };
 
     var card = document.createElement("div");
@@ -320,6 +297,8 @@ export async function filterFirestoreDataVAdv() {
     var userName = document.createElement("h5");
     var targettext = document.createElement("p");
     var exampleSentence = document.createElement("p");
+    var originSentence = document.createElement("p");
+
     userName.innerHTML = "Username: " + username;
     userName.addEventListener("click", () => {
       // clear container
@@ -327,12 +306,13 @@ export async function filterFirestoreDataVAdv() {
     });
     targettext.innerHTML = "TargetText: " + target;
     exampleSentence.innerHTML = "Example Sentence: " + example; // added this
-
+    originSentence.innerHTML = "Origin Sentence: " + origin;
     card.appendChild(cardheader);
     card.appendChild(cardbody);
     cardheader.appendChild(userName);
     cardbody.appendChild(targettext);
     cardbody.appendChild(exampleSentence);
+    cardbody.appendChild(originSentence);
 
     card.addEventListener("click", () => {
       window.location.assign("Comments.html" + "?targetTextId=" + doc.id);
@@ -347,23 +327,11 @@ sortVerbNoun?.addEventListener("click", () => {
   filterFirestoreDataVN();
   //first filter V+N and then sort by username
   const sortUserVN = document.querySelector('[data-link="sortUser"]');
-  sortUserVN?.addEventListener("click", () => {
-    const wordtypeNoun = where("type", "==", "Verb + Noun");
-    filterFirestoreDataUser(wordtypeNoun);
+  sortUserVN.addEventListener("click", () => {
+    const wordtypeVN = where("type", "==", "Verb + Noun");
+    filterFirestoreDataUser(wordtypeVN);
   });
-});
-
-//sort V+Adv and listen to sort by username
-const sortVerbAdv = document.querySelector('[data-link="sortVerbAdv"]');
-sortVerbAdv?.addEventListener("click", () => {
-  filterFirestoreDataVAdv();
-
-  //first filter V+Adv and then sort by username
-  const sortUserAdv = document.querySelector('[data-link="sortUser"]');
-  sortUserAdv?.addEventListener("click", () => {
-    const wordtypeAdv = where("type", "==", "Verb + Adv");
-    filterFirestoreDataUser(wordtypeAdv);
-  });
+   
 });
 
 //sort V+Prep and listen to sort by username
@@ -372,18 +340,33 @@ sortVerbPrep?.addEventListener("click", () => {
   filterFirestoreDataVPrep();
   //first filter V+Adv and then sort by username
   const sortUserPrep = document.querySelector('[data-link="sortUser"]');
-  sortUserPrep?.addEventListener("click", () => {
+  sortUserPrep.addEventListener("click", () => {
     const wordtypePrep = where("type", "==", "Verb + Prep");
     filterFirestoreDataUser(wordtypePrep);
   });
+
+});
+
+//sort V+Adv and listen to sort by username
+const sortVerbAdv = document.querySelector('[data-link="sortVerbAdv"]');
+sortVerbAdv.addEventListener("click", () => {
+  filterFirestoreDataVAdv();
+
+  //first filter V+Adv and then sort by username
+  const sortUserAdv = document.querySelector('[data-link="sortUser"]');
+  sortUserAdv?.addEventListener("click", () => {
+    const wordtypeADV = where("type", "==", "Verb + Adv");
+    filterFirestoreDataUser(wordtypeADV);
+  });
+  
 });
 
 //only sort user but nt need to do anythings
 const sortUser = document.querySelector('[data-link="sortUser"]');
 sortUser?.addEventListener("click", () => {
   document.querySelector("#containerdis").innerHTML = "";
-  const wordtypeNoun = where("type", "==", "Verb + Noun");
-  filterFirestoreDataUser(wordtypeNoun);  // default sorting username is V+N
+  //const wordtypeVN = where("type", "==", "Verb + Noun");
+  //filterFirestoreDataUser(wordtypeVN);  // default sorting username is V+N
 });
 
 //only sort frequency but nt need to do anythings
@@ -484,6 +467,7 @@ export async function Sortbytargettext() {
     var userName = document.createElement("h5");
     var targettext = document.createElement("p");
     var exampleSentence = document.createElement("p");
+    var originSentence = document.createElement("p");
     userName.innerHTML = "Username: " + s.name;
     userName.addEventListener("click", () => {
       // clear container
@@ -491,12 +475,14 @@ export async function Sortbytargettext() {
     });
     targettext.innerHTML = "TargetText: " + s.targetText;
     exampleSentence.innerHTML = "Example Sentence: " + s.ExampleSentence; // added this
+    originSentence.innerHTML = "Example Sentence: " + s.originText; 
 
     card.appendChild(cardheader);
     card.appendChild(cardbody);
     cardheader.appendChild(userName);
     cardbody.appendChild(targettext);
     cardbody.appendChild(exampleSentence);
+    cardbody.appendChild(originSentence);
 
     //eventdata = doc.id;
     card.addEventListener("click", () => {
