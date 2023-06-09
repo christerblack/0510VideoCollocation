@@ -66,7 +66,14 @@
         occurence.addEventListener('click', function () {
             console.log('A button with ID ' + id + ' was clicked!')
             const getSRTfile = occurence.getAttribute('datasrt');
-           
+
+            if(getSRTfile === "0101.srt") {
+                $('#video1').attr('data-attr', 'episode 1');
+            }
+            else{
+                $('#video1').attr('data-attr', 'episode 2');
+            }
+           // $(selector).data('my-attr', 'test value');
             subtitlesrc = getSRTfile;
             if(subtitlesrc !== "undefined") {
             document.querySelector(".videosubbar").innerHTML = "";

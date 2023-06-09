@@ -26,6 +26,17 @@ async function createFirestoreData(target_text) {
   const usernameUid = JSON.parse(user).uid;
   const username = JSON.parse(user).displayName;
   const originText = document.getElementById("text_english");
+  
+  const video_time = document.getElementById("video1");
+  const videotimemin = pad(Math.floor(video_time.currentTime / 60));
+  const videotimesc = pad(Math.floor(video_time.currentTime % 60));
+  const timestampvideo = videotimemin+":"+videotimesc;
+
+  const videoEP = $('#video1').attr('data-attr');
+ 
+  function pad(d) {
+    return (d < 10) ? '0' + d.toString() : d.toString();
+  }
 
   const text_key = `${target_text}`;
   await addDoc(collection(firestoreDB, "TargetText"), {
@@ -36,9 +47,45 @@ async function createFirestoreData(target_text) {
     videoSRT: `${subtitlesrc}`,
     timestamp: new Date().getTime(),
     datetime: new Date(),
+    videotimestamp: timestampvideo,
+    video: videoEP
   });
   console.log("create success");
 }
+// Read User Data
+async function readUserData(uid) {
+  console.log(uid)
+  const user = localStorage.getItem("googleUser");
+  const usernameUid = uid //JSON.parse(user).uid;
+  const q = query(collection(firestoreDB, "TargetText"), where("useruid", "==", usernameUid));
+  const querySnapshot = await getDocs(q);
+  // clear
+  console.log("All firestore order by username how many document filter out: " + querySnapshot.size);
+  document.querySelector("#listgroup").innerHTML = "";
+  querySnapshot.forEach((doc) => {
+ 
+    const target = `${doc.data().targetText}`;
+    const videotime = `${doc.data().videotimestamp}`;
+    const videoEP = `${doc.data().video}`;
+   
+    var card = document.createElement("li"); 
+    card.setAttribute("class", "list-group-item"); // list
+    card.setAttribute("id", "list-Item");
+    card.setAttribute("style", "max-width: 70rem;");
+    document.querySelector("#listgroup").appendChild(card); // ul 包住 li
+    card.innerHTML = "TargetText: " + target;
+
+    var videotimestamp = document.createElement("p");
+    videotimestamp.innerHTML = "Collocations exist on video "+ videoEP + " time is: " + videotime;
+    card.appendChild(videotimestamp); 
+    
+    // card.addEventListener("click", () => {
+    //   window.location.assign("Comments.html" + "?targetTextId=" + doc.id);
+    // });
+    // card.classList.add("text");
+  });
+}
+
 
 // Read Data
 async function readFirestoreData(TargetWord) {
@@ -59,7 +106,7 @@ async function updateFirestoreData(TargetWord,wordType,translateWord,ExampleSen)
   const text_KEY = `${TargetWord}`;
   const user = localStorage.getItem("googleUser");
   const usernameUid = JSON.parse(user).uid;
-  //console.log(usernameUid)
+  console.log(usernameUid)
   const q = query(collection(firestoreDB, "TargetText"), where("targetText", "==", text_KEY), where("useruid", "==", usernameUid));
     const querySnapshot = await getDocs(q);
     querySnapshot.docs.map((doc) => 
@@ -139,4 +186,4 @@ async function all() {
     // console.log("Username: "+usernamedisplayname, "Document id:"+ doc.id, "ExampleSentence:"+doc.data().ExampleSentence);
 
 
-export { createFirestoreData, readFirestoreData, updateFirestoreData, deleteFirestoreData ,all };
+export { createFirestoreData, readFirestoreData, updateFirestoreData, deleteFirestoreData ,all ,readUserData };

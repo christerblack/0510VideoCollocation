@@ -125,7 +125,7 @@ export async function filterFirestoreDataFrequency(WordTypeFreq) {
 
 // Filter data Verb+Noun
 export async function filterFirestoreDataVN() {
- 
+
   const citiesRef = collection(firestoreDB, "TargetText");
   const VN = query(citiesRef, where("type", "==", "Verb + Noun"));
   const querySnapshot1 = await getDocs(VN);
@@ -135,7 +135,7 @@ export async function filterFirestoreDataVN() {
   const allEventData = [];
   querySnapshot1.forEach((doc) => {
     var eventdata = doc.data();
-  
+
     allEventData.push(eventdata);
     const username = `${doc.data().name}`;
     const target = `${doc.data().targetText}`;
@@ -169,7 +169,7 @@ export async function filterFirestoreDataVN() {
     userName.addEventListener("click", () => {
       // clear container
       document.querySelector("#containerdis").innerHTML = "";
-      
+
     });
     targettext.innerHTML = "TargetText: " + target;
     exampleSentence.innerHTML = "Example Sentence: " + example; // added this
@@ -247,7 +247,7 @@ export async function filterFirestoreDataVPrep() {
     cardbody.appendChild(targettext);
     cardbody.appendChild(exampleSentence);
     cardbody.appendChild(originSentence);
-    
+
     card.addEventListener("click", () => {
       window.location.assign("Comments.html" + "?targetTextId=" + doc.id);
     });
@@ -331,7 +331,7 @@ sortVerbNoun?.addEventListener("click", () => {
     const wordtypeVN = where("type", "==", "Verb + Noun");
     filterFirestoreDataUser(wordtypeVN);
   });
-   
+
 });
 
 //sort V+Prep and listen to sort by username
@@ -349,16 +349,16 @@ sortVerbPrep?.addEventListener("click", () => {
 
 //sort V+Adv and listen to sort by username
 const sortVerbAdv = document.querySelector('[data-link="sortVerbAdv"]');
-sortVerbAdv.addEventListener("click", () => {
+sortVerbAdv?.addEventListener("click", () => {
   filterFirestoreDataVAdv();
 
   //first filter V+Adv and then sort by username
   const sortUserAdv = document.querySelector('[data-link="sortUser"]');
-  sortUserAdv?.addEventListener("click", () => {
+  sortUserAdv.addEventListener("click", () => {
     const wordtypeADV = where("type", "==", "Verb + Adv");
     filterFirestoreDataUser(wordtypeADV);
   });
-  
+
 });
 
 //only sort user but nt need to do anythings
@@ -427,21 +427,52 @@ export async function Sortbytargettext() {
       frequency[t.targetText] += 1;
     } else {
       frequency[t.targetText] = 1;
-
     }
 
   });
+   console.log(frequency); // obj
+
+   const myJSON = JSON.stringify(frequency); // json
+  
+  for (var prop in frequency) {
+    const str = prop +" Frequency: "+frequency[prop];
+    console.log(str)
+    var card = document.createElement("div");
+    card.setAttribute("class", "card bg-light mb-3");
+    card.setAttribute("id", "card-container");
+    card.setAttribute("style", "max-width: 70rem;");
+    document.querySelector("#containerdis").appendChild(card);
+
+    var cardbody = document.createElement("div");
+    cardbody.setAttribute("class", "card-target");
+    card.appendChild(cardbody);
+
+    var targettext = document.createElement("p");
+    targettext.addEventListener("click", () => {
+      // clear container
+      //const videoEP = $('#video1').attr('data-attr');
+      $('<style>.newClass { color: red; }</style>').appendTo('card-target p');
+      document.querySelector("#containerdis").innerHTML = "";
+    });
+    targettext.innerHTML = "TargetText: " + str;
+    card.appendChild(cardbody);
+    cardbody.appendChild(targettext);
+    
+  }
 
   let sort = text.map(t => {
     return [frequency[t.targetText], t];
+
   })
 
   sort.sort((a, b) => {
     return b[0] - a[0];
+
   })
 
   const sorted = sort.map(s => {
     return s[1];
+
   })
 
   sorted.forEach(s => {
@@ -475,7 +506,7 @@ export async function Sortbytargettext() {
     });
     targettext.innerHTML = "TargetText: " + s.targetText;
     exampleSentence.innerHTML = "Example Sentence: " + s.ExampleSentence; // added this
-    originSentence.innerHTML = "Example Sentence: " + s.originText; 
+    originSentence.innerHTML = "Example Sentence: " + s.originText;
 
     card.appendChild(cardheader);
     card.appendChild(cardbody);

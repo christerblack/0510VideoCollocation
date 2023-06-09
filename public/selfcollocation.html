@@ -29,11 +29,24 @@
     integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd"
     crossorigin="anonymous"></script> -->
     <script type="module" defer="defer" src="/init-firebase.js"></script>
-    <script type="module"  src="/selfcollocation.js" crossorigin="anonymous"></script>
+    <script type="module" src="/selfcollocation.js" crossorigin="anonymous"></script>
     <script type="module" async="async" src="/crud.js" crossorigin="anonymous"></script>
+
+    <style>
+        #listgroup {
+            position: absolute;
+            max-width: 500px;
+            width: 100%;
+            margin: auto;
+            top: 12%;
+            left: 30%;
+            display: flex 1 1 2;
+        }
+    </style>
+
 </head>
 
-<body>
+<body onload="loadalldata()">
     <!-- <div class="list-group">
         <a href="#" class="list-group-item list-group-item-action active" aria-current="true">
             <div class="d-flex w-100 justify-content-between">
@@ -61,10 +74,13 @@
         </a>
     </div> -->
 
-    
-    <div onload="myfunction()" class="container" id="containerdis">
-       
+    <div class="justify-content-center">
+        <h3 style="margin: auto; position:relative; top: 2rem; text-align: center; ">Self Collocation List</h3>
+        <ul class="list-group" id="listgroup">
+
+        </ul>
     </div>
+
     <div class="container" id="container">
     </div>
 
