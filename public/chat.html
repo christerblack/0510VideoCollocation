@@ -16,6 +16,7 @@
     <script type="module" defer="defer" src="/init-firebase.js"></script>
     <script type="module" async="async" src="/crud.js" crossorigin="anonymous"></script>
     <script type="module" async="async" src="/filter.js" crossorigin="anonymous"></script>
+    <script type="module"  src="/selfcollocation.js" crossorigin="anonymous"></script>
     <script src="https://use.fontawesome.com/fe459689b4.js"></script>
 
     <style>
@@ -43,7 +44,7 @@
     </style>
 </head>
 
-<body>
+<body >
     <!-- <div class="card">
         
     </div> -->
@@ -55,15 +56,15 @@
                     <div class="row gap-2 mb-4">
                         <div class="col ml-4">
                             <div class="dropdown">
-                                <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownWordType" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <button class="btn btn-primary dropdown-toggle" type="button" dataattr="Verb + Noun" id="dropdownWordType" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     Word Type
                                 </button>
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                    <button class="dropdown-item word" id="Verb+Noun" data-link="sortVerbNoun">Verb +
+                                    <button class="dropdown-item word" id="Verb + Noun" data-link="sortVerbNoun">Verb +
                                         Noun</button>
-                                    <button class="dropdown-item word" id="Verb+Prep" data-link="sortVerbPrep">Verb +
+                                    <button class="dropdown-item word" id="Verb + Prep" data-link="sortVerbPrep">Verb +
                                         Prep</button>
-                                    <button class="dropdown-item word" id="Verb+Adv" data-link="sortVerbAdv">Verb +
+                                    <button class="dropdown-item word" id="Verb + Adv" data-link="sortVerbAdv">Verb +
                                         Adverb</button>
                                 </div>
                             </div>
@@ -92,126 +93,12 @@
 
 
                     <div class="container" id="containerdis">
-                        <div class="loading" id="load'" ></div>
+                        
                     </div>
                     <div class="container" id="container">
                     </div>
 
-                    <!-- <div class="card-body">
-                <ul class="list-group list-group-flush gap-3" id="list">
-                    <li class="list-group-item" data-id="liClass">
-                        <div class="row m-0 flex-md-wrap">
-                            <div class="col-md-8 col-sm-12 p-0 d-flex align-items-center gap-4">
-                                <img src="data:image/png;base64,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"
-                                    alt="avatar" width="80" height="80">
-                                <span class="">David</span>
-                                <span class="mx-2">10:42</span>
-                                <span class="mx-2">26-12-2022</span>
-                            </div>
-                            <div class="col-md-4 col-sm-12 p-0">
-                                <div class="btn-group gap-2 float-end" role="group" aria-label="Basic example">
-                                    <button class="btn btn-md btn-success rounded-circle p-1">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                            fill="currentColor" class="bi bi-check2" viewBox="0 0 16 16">
-                                            <path
-                                                d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z" />
-                                        </svg>
-                                    </button>
-                                    <button class="btn btn-md btn-danger rounded-circle p-1">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="20"
-                                            fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
-                                            <path
-                                                d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z" />
-                                        </svg>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row m-0">
-                            <div class="col-12 p-0 mb-3">
-                                <input type="text" class="form-control" id="input-text" placeholder="Text Input">
-                            </div>
-                            <div class="col-12 p-0">
-                                <button class="btn btn-md btn-primary">Reply</button>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="list-group-item ">
-                        <div class="row m-0 flex-md-wrap">
-                            <div class="col-md-8 col-sm-12 p-0 d-flex align-items-center gap-4">
-                                <img src="data:image/png;base64,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"
-                                    alt="avatar" width="80" height="80">
-                                <span class="">David</span>
-                                <span class="mx-2">10:42</span>
-                                <span class="mx-2">26-12-2022</span>
-                            </div>
-                            <div class="col-md-4 col-sm-12 p-0">
-                                <div class="btn-group gap-2 float-end" role="group" aria-label="Basic example">
-                                    <button class="btn btn-md btn-success rounded-circle p-1">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                            fill="currentColor" class="bi bi-check2" viewBox="0 0 16 16">
-                                            <path
-                                                d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z" />
-                                        </svg>
-                                    </button>
-                                    <button class="btn btn-md btn-danger rounded-circle p-1">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="20"
-                                            fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
-                                            <path
-                                                d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z" />
-                                        </svg>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row m-0">
-                            <div class="col-12 p-0 mb-3">
-                                <input type="text" class="form-control" id="" placeholder="Text Input">
-                            </div>
-                            <div class="col-12 p-0 gap-4">
-                                <button class="btn btn-md btn-primary">Reply</button>
-                                <button class="btn btn-md btn-secondary ">View 1 reply</button>
-                            </div>
-                        </div>
-                        <ul class="list-group border-0 gap-3 ">
-                            <li class="list-group-item border-0 ms-5">
-                                <div class="row m-0 flex-md-wrap">
-                                    <div class="col-md-8 col-sm-12 p-0 d-flex align-items-center gap-4">
-                                        <img src="data:image/png;base64,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"
-                                            alt="avatar" width="80" height="80">
-                                        <span class="">David</span>
-                                        <span class="mx-2">10:42</span>
-                                        <span class="mx-2">26-12-2022</span>
-                                    </div>
-                                    <div class="col-md-4 col-sm-12 p-0">
-                                        <div class="btn-group gap-2 float-end" role="group" aria-label="Basic example">
-                                            <button class="btn btn-md btn-success rounded-circle p-1">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                    fill="currentColor" class="bi bi-check2" viewBox="0 0 16 16">
-                                                    <path
-                                                        d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z" />
-                                                </svg>
-                                            </button>
-                                            <button class="btn btn-md btn-danger rounded-circle p-1">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="20"
-                                                    fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
-                                                    <path
-                                                        d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z" />
-                                                </svg>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row m-0">
-                                    <div class="col-12 p-0 mb-3">
-                                        <input type="text" class="form-control" id="" placeholder="Text Input">
-                                    </div>
-                                </div>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-            </div> -->
+             
                 </div>
             </div>
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
@@ -220,18 +107,7 @@
                 </script>
 
             <script>
-                // $('.dropdown-item word').on('click', function () {
-                //     $(`#load`).css("display", "block")
-                // });
-                // document.onreadystatechange = function () {
-                //     // page fully load
-                //     if (document.readyState == "complete") {
-                //         // hide loader after 2 seconds
-                //         setTimeout(function () {
-                //             $(`#load`).css("display", "none")
-                //         }, 2000);
-                //     }
-                // }
+           
             </script>
        
             <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
