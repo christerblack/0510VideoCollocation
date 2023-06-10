@@ -284,16 +284,6 @@ export async function filterFirestoreDataVAdv() {
 const sortVerbNoun = document.querySelector('[data-link="sortVerbNoun"]');
 sortVerbNoun?.addEventListener("click", () => {
   filterFirestoreDataVN();
-<<<<<<< HEAD
-=======
-  //first filter V+N and then sort by username
-  const sortUserVN = document.querySelector('[data-link="sortUser"]');
-  sortUserVN.addEventListener("click", () => {
-    const wordtypeVN = where("type", "==", "Verb + Noun");
-    filterFirestoreDataUser(wordtypeVN);
-  });
-
->>>>>>> f5beaa8e0d38e320a598af185abc4c5e227ca81e
 });
 
 //sort V+Prep and listen to sort by username
@@ -306,17 +296,6 @@ sortVerbPrep?.addEventListener("click", () => {
 const sortVerbAdv = document.querySelector('[data-link="sortVerbAdv"]');
 sortVerbAdv?.addEventListener("click", () => {
   filterFirestoreDataVAdv();
-<<<<<<< HEAD
-=======
-
-  //first filter V+Adv and then sort by username
-  const sortUserAdv = document.querySelector('[data-link="sortUser"]');
-  sortUserAdv.addEventListener("click", () => {
-    const wordtypeADV = where("type", "==", "Verb + Adv");
-    filterFirestoreDataUser(wordtypeADV);
-  });
-
->>>>>>> f5beaa8e0d38e320a598af185abc4c5e227ca81e
 });
 
 // //only sort user but nt need to do anythings
@@ -391,61 +370,12 @@ export async function Sortbytargettext() {
 
   });
    console.log(frequency); // obj
-<<<<<<< HEAD
 
    const myJSON = JSON.stringify(frequency); // json
   
   for (var prop in frequency) {
     const str = prop +" Frequency: "+frequency[prop];
     console.log(str)
-=======
-
-   const myJSON = JSON.stringify(frequency); // json
-  
-  for (var prop in frequency) {
-    const str = prop +" Frequency: "+frequency[prop];
-    console.log(str)
-    var card = document.createElement("div");
-    card.setAttribute("class", "card bg-light mb-3");
-    card.setAttribute("id", "card-container");
-    card.setAttribute("style", "max-width: 70rem;");
-    document.querySelector("#containerdis").appendChild(card);
-
-    var cardbody = document.createElement("div");
-    cardbody.setAttribute("class", "card-target");
-    card.appendChild(cardbody);
-
-    var targettext = document.createElement("p");
-    targettext.addEventListener("click", () => {
-      // clear container
-      //const videoEP = $('#video1').attr('data-attr');
-      $('<style>.newClass { color: red; }</style>').appendTo('card-target p');
-      document.querySelector("#containerdis").innerHTML = "";
-    });
-    targettext.innerHTML = "TargetText: " + str;
-    card.appendChild(cardbody);
-    cardbody.appendChild(targettext);
-    
-  }
-
-  let sort = text.map(t => {
-    return [frequency[t.targetText], t];
-
-  })
-
-  sort.sort((a, b) => {
-    return b[0] - a[0];
-
-  })
-
-  const sorted = sort.map(s => {
-    return s[1];
-
-  })
-
-  sorted.forEach(s => {
-    //console.log(s)
->>>>>>> f5beaa8e0d38e320a598af185abc4c5e227ca81e
     var card = document.createElement("div");
     card.setAttribute("class", "card bg-light mb-3");
     card.setAttribute("id", "card-container");
@@ -459,24 +389,11 @@ export async function Sortbytargettext() {
     card.appendChild(cardbody);
 
     var targettext = document.createElement("p");
-<<<<<<< HEAD
     targettext.setAttribute("class", "class-title");
     targettext.setAttribute("style", "cursor: pointer;");
     var frequency1 = document.createElement("p");
     frequency1.setAttribute("class", "class-title");
     frequency1.setAttribute("style", "cursor: pointer;");
-=======
-    var exampleSentence = document.createElement("p");
-    var originSentence = document.createElement("p");
-    userName.innerHTML = "Username: " + s.name;
-    userName.addEventListener("click", () => {
-      // clear container
-      document.querySelector("#containerdis").innerHTML = "";
-    });
-    targettext.innerHTML = "TargetText: " + s.targetText;
-    exampleSentence.innerHTML = "Example Sentence: " + s.ExampleSentence; // added this
-    originSentence.innerHTML = "Example Sentence: " + s.originText;
->>>>>>> f5beaa8e0d38e320a598af185abc4c5e227ca81e
 
   
     targettext.innerHTML = "TargetText: ";
