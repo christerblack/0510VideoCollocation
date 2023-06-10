@@ -7,7 +7,7 @@ const firestoreDB = getFirestore(app);
 
 // Filter data username
 export async function filterFirestoreDataUser() {
-  var DATAATTR = $('#dropdownWordType').data('dataattr'); //getter
+  var DATAATTR = dropdownWordType.getAttribute("dataAttr"); //getter
   var wordType = where("type", "==", DATAATTR);
   const citiesRef = collection(firestoreDB, "TargetText");
   //console.log(wordType)
@@ -300,10 +300,11 @@ sortVerbAdv?.addEventListener("click", () => {
 
 // //only sort user but nt need to do anythings
 const sortUser = document.querySelector('[data-link="sortUser"]');
+
 sortUser?.addEventListener("click", () => {
   document.querySelector("#containerdis").innerHTML = "";
   const attribute = "Verb + Noun"
-  $('#dropdownWordType').data('dataattr',attribute); //setter
+  $("#dropdownWordType").data('dataAttr',attribute); //setter
   filterFirestoreDataUser();  // default sorting username is V+N
  
 });
@@ -410,11 +411,6 @@ export async function Sortbytargettext() {
       const words = gettargetword.split(': ');
       const word = words[1];
       readFirestoreData(word)
-      
-      // clear container
-      //const videoEP = $('#video1').attr('data-attr');
-      // $('<style>.newClass { color: red; }</style>').appendTo('card-target p');
-      // document.querySelector("#containerdis").innerHTML = "";
 
     });
     
@@ -491,7 +487,9 @@ var myFunction = function () {
   // document.getElementById("#dropdownWordType").innerText = " "+ attribute;
   //alert(attribute);
   document.getElementById('dropdownWordType').innerHTML = attribute;
-  $('#dropdownWordType').data('dataattr',attribute); //setter
+  //var brand = dropdownWordType.getAttribute("dataAttr") 
+  dropdownWordType.setAttribute("dataAttr", attribute)   
+ // $('#dropdownWordType').data('dataAttr',attribute); //setter
 
 };
 
@@ -504,8 +502,7 @@ var elements = document.getElementsByClassName("dropdown-item sort");
 
 var myFunction = function () {
   var attribute = this.getAttribute("data-link");
-  // document.getElementById("#dropdownWordType").innerText = " "+ attribute;
-  //alert(attribute);
+
   document.getElementById('dropdownSortByCondition').innerHTML = attribute;
 };
 
