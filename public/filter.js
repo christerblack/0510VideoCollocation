@@ -88,7 +88,7 @@ export async function filterFirestoreDataVN() {
   const citiesRef = collection(firestoreDB, "TargetText");
   const VN = query(citiesRef, where("type", "==", "Verb + Noun"));
   const querySnapshot1 = await getDocs(VN);
-  //console.log("V+N how many document filter out: " + querySnapshot1.size); // how many document filter out
+  console.log("V+N how many document filter out: " + querySnapshot1.size); // how many document filter out
 
   document.querySelector("#containerdis").innerHTML = "";
   const allEventData = [];

@@ -1,6 +1,7 @@
 import { collection, onSnapshot, getDocs, updateDoc, getDoc, getFirestore, doc, query, where } from "https://www.gstatic.com/firebasejs/9.16.0/firebase-firestore.js";
 
 import { app } from "/firebaseConfig.js";
+//import { readFirestoreData } from "./crud.js";
 
 
 const firestoreDB = getFirestore(app);
@@ -77,7 +78,7 @@ export async function filterFirestoreDataUser(str) {
 }
 
 
-// // handle like and dislike 
+// handle like 
 let like_flag = false;
 let dislike_flag = false;
 function liked(event) {
@@ -86,104 +87,131 @@ function liked(event) {
   var url = new URL(url_string);
   var str = url.search;
   str = str.slice(14);
-  let counter = parseFloat(document.getElementById("counterlike").innerHTML);
+  let like = parseFloat(document.getElementById("counterlike").innerHTML);
 
-  //var like = document.querySelector('#counterlike');
-  // const likecount = like.textContent
-  // let counter1 = parseFloat(document.getElementById('counterdislike').innerHTML);
-  // var button1 = event.target.innerText;
-  // var dislike = document.querySelector('#counterdislike');
-  // const dislikecount = dislike.textContent
   if (dislike_flag !== true) {
-
-    if (like_flag==false) {
-      counter++;
-      like_flag=true;
-    
+    if (like_flag == false) {
+      like++;
+      like_flag = true;
     } else {
-      counter--;
-      like_flag=false;
+      like--;
+      like_flag = false;
     }
   }
-  // ++counter;
-  console.log('the button '+'like'+' was pressed' + counter);
-  //updateFirestoreData(str, likecount, dislikecount)
+
+  console.log('the button ' + 'like' + ' was pressed' + like);
+  //$('likes').css({backgroundColor: "yellow"});
+  //$("#myParagraph").css({"backgroundColor": "black", "color": "white"});
+  updateFirestoreDatalike(str, like)
+  realtimeupdatelike(str, like)
 
   //realtimeupdate(str)
-  document.getElementById("counterlike").innerText = counter;
+  //document.getElementById("counterlike").innerText = like;
 }
 
+// handle dislike
 function disliked(event) {
   var url_string = window.location.href;
   var url = new URL(url_string);
   var str = url.search;
   str = str.slice(14);
-  // let counter = parseFloat(document.getElementById('counterlike').innerHTML);
-  // var button = event.target.innerText;
-  // var like = document.querySelector('#counterlike');
-  // const likecount = like.textContent
 
-  let counter1 = parseFloat(document.getElementById('counterdislike').innerHTML);
-  //var dislike = document.querySelector('#counterdislike');
- // const dislikecount = dislike.textContent
- if (like_flag !== true) {
+  let dislike = parseFloat(document.getElementById('counterdislike').innerHTML);
 
-   if (dislike_flag==false) {
-     counter1--;
-     dislike_flag=true;
+  if (like_flag !== true) {
+    if (dislike_flag == false) {
+      dislike++;
+      dislike_flag = true;
     }
     else {
-      counter1++;
-      dislike_flag=false;
+      dislike--;
+      dislike_flag = false;
     }
   }
-    // ++counter1;
-  console.log('the button '+'dislike'+' was pressed' + counter1);
-  //updateFirestoreData(str, likecount, dislikecount)
+  // ++counter1;
+  console.log('the button ' + 'dislike' + ' was pressed' + dislike);
+  realtimeupdatedislike(str, dislike)
+  updateFirestoreDatadislike(str, dislike)
 
-  document.getElementById('counterdislike').innerText = counter1;
+  document.getElementById('counterdislike').innerText = dislike;
   //realtimeupdate(str)
 }
 
 
-//updateFirestoreData 
-export async function updateFirestoreData(str, likecount, dislikecount) {
+//updateFirestoreData  like 
+export async function updateFirestoreDatalike(str, count) {
   const textid = str;
-  const elm = likecount;
-  const elm1 = dislikecount;
-  //console.log(str);
-  //const user = localStorage.getItem("googleUser");
-  //const usernameUid = JSON.parse(user).uid;
-  //console.log(usernameUid)
+  const count1 = count;
+  var DATAATTR = document.getElementById("counterlike").innerText;
+  // var a = $('#counterlike').innerText; //getter
+  console.log(Number(DATAATTR), Number(count1));
+
   const docRef = doc(firestoreDB, "TargetText", textid);
-  //const docSnap = await getDoc(docRef);
 
   updateDoc(docRef, {
-    like: elm,
-    dislike: elm1,
-    timestamp: new Date().getTime(),
-    datetime: new Date(),
+    like: count1,
+    commentliketimestamp: new Date().getTime(),
+    commentdate: new Date(),
   })
 
   console.log("update finished");
 
 }
 
-export async function realtimeupdate(str) {
+//updateFirestoreData dislike
+export async function updateFirestoreDatadislike(str, count1) {
   const textid = str;
+  const aaa = count1;
+  //console.log(textid)
+  var DATAATTR = document.getElementById("counterdislike").innerText;
+  //console.log(Number(DATAATTR),Number(count1));
 
-  const unsub = onSnapshot(doc(firestoreDB, "TargetText", textid), (doc) => {
-    console.log("Current data: ", doc.data().like, doc.data().dislike);
+  const docRef = doc(firestoreDB, "TargetText", textid);
 
+  updateDoc(docRef, {
+    dislike: aaa,
+    commentdisliketimestamp: new Date().getTime(),
+    commentdate: new Date(),
+  })
+
+  console.log("update finished");
+
+}
+
+//realtimeupdate like
+export async function realtimeupdatelike(str, count) {
+  const textid = str;
+  const countlike = count
+
+  onSnapshot(doc(firestoreDB, "TargetText", textid), (doc) => {
     const like = doc.data().like
-    document.getElementById('counterlike').innerText = like;
-    document.getElementById('counterdislike').innerText = doc.data().dislike;
-  });
+    console.log("Current data: ", doc.data().like, doc.data().dislike);
+    const totallike = Number(Number(like) + Number(countlike))
+    console.log("Total like: " + totallike)
 
+    //const dislike = doc.data().dislike
+    document.getElementById('counterlike').innerText = like;
+  });
 
   console.log("realtime update finished");
 }
 
+//realtimeupdate dislike
+export async function realtimeupdatedislike(str, count1) {
+  const textid = str;
+  const dislikecount = count1
+  console.log(dislikecount)
+
+  onSnapshot(doc(firestoreDB, "TargetText", textid), (doc) => {
+    console.log("Current data: ", doc.data().like, doc.data().dislike);
+    const dislike = doc.data().dislike
+    //const totalDislike = Number(Number(dislike) + Number(dislikecount))
+    //console.log("Total dislike: " +totalDislike)
+
+    document.getElementById('counterdislike').innerText = dislike;
+  });
+  console.log("realtime update finished");
+}
 
 document.getElementById("comment")?.addEventListener("click", getcomment);
 function getcomment() {
@@ -193,7 +221,7 @@ function getcomment() {
   const usernameUid = JSON.parse(user).uid;
   const username = JSON.parse(user).displayName;
 
-  console.log(textinput) 
+  console.log(textinput)
   //console.log(user)
 
   document.querySelector('.mr-2').innerHTML = username; //comment-text-sm
