@@ -28,7 +28,7 @@
         <div class="d-flex justify-content-center row">
             <div class="d-flex flex-column col-md-8">
                 <div class="d-flex flex-row align-items-center text-left comment-top p-2 bg-white border-bottom px-4">
-              
+
                     <div class="card" id="card-container">
                         <div class="card-header">
                             <h5 class="Username" id="username">Username: </h5>
@@ -69,30 +69,38 @@
 
                     <div class="commented-section mt-2">
                         <div class="d-flex flex-row align-items-center commented-user">
-                            <h5 class="mr-2"  id="username"></h5>
-                          
+                            <h5 class="mr-2" id="username"></h5>
+                            <p id="datetimeshow"></p>
+
                         </div>
                         <div class="comment-text-sm" id="Comment Sentence"><span></span></div>
                         <div class="reply-section">
-                            <div class="d-flex flex-row align-items-center voting-icons" id="replycomment" style="visibility:hidden">
-                                    <i class="fa fa-sort-up fa-2x mt-3 hit-voting"></i>
-                                    <i class="fa fa-sort-down fa-2x mb-3 hit-voting"></i>
-                                    <span class="ml-2">15</span>
-                                    <span class="dot ml-2"></span>
-                                    <button class="btn btn-primary" id="replybutton" type="button">Reply</button> 
-                                </div>
-                           
-                                <div class="d-flex flex-row add-comment-section mt-4 mb-4" id="replyandreply" style="visibility:hidden">
-                                    <input type="text" id="TextInputField" class="form-control mr-md-4" placeholder="Add reply comment" />
-                                    <button class="btn btn-primary" id="comment" type="button">Comment</button>
-                                </div>
+                            <div class="d-flex flex-row align-items-center voting-icons" id="replycomment"
+                                style="visibility:hidden">
+                                <!-- <i class="fa fa-sort-up fa-2x mt-3 hit-voting"></i>
+                                <i class="fa fa-sort-down fa-2x mb-3 hit-voting"></i>
+                                <span class="ml-2">15</span>
+                                <span class="dot ml-2"></span> -->
+                                <button class="btn btn-primary" id="replybutton" type="button">Reply</button>
                             </div>
-                      
+
+                            <div class="d-flex flex-row add-comment-section mt-4 mb-4" id="replyandreply"
+                                style="visibility:hidden">
+                                <input type="text" id="TextInputFieldUserPost" class="form-control mr-md-4"
+                                    placeholder="Press Enter to reply" />
+
+                            </div>
+                        </div>
+
+                        <div id="CommentDiv" style="margin-left: 15%;"></div>
+
                     </div>
-                   
+
                 </div>
+
             </div>
         </div>
+    </div>
     </div>
     <script>
 

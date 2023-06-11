@@ -35,8 +35,8 @@ body {
 }
 
 #replyandreply{
-  max-width: 60%;
-  border: 2px solid;
+   width: auto;
+  /* border: 2px solid; */
 }
 
 .hit-voting {
@@ -80,6 +80,10 @@ button{
 .wrapper{
   margin: 0 50px;
   width: 50%;
+}
+
+.reply-section{
+  display: flex;
 }
 
 .likes{

@@ -283,6 +283,7 @@ export async function filterFirestoreDataVAdv() {
 //sort V+N and listen to sort by username
 const sortVerbNoun = document.querySelector('[data-link="sortVerbNoun"]');
 sortVerbNoun?.addEventListener("click", () => {
+  
   filterFirestoreDataVN();
 });
 
