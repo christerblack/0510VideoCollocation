@@ -1,4 +1,4 @@
-import { collection, setDoc, onSnapshot, getDocs, updateDoc, getDoc, getFirestore, doc, query, where } from "https://www.gstatic.com/firebasejs/9.16.0/firebase-firestore.js";
+import { collection, addDoc, setDoc, onSnapshot, getDocs, updateDoc, getDoc, getFirestore, doc, query, where } from "https://www.gstatic.com/firebasejs/9.16.0/firebase-firestore.js";
 
 import { app } from "/firebaseConfig.js";
 import { readFirestoreData } from "./crud.js";
@@ -240,8 +240,9 @@ function formatDate(date) {
 }
 
 // reply comment of post 
-document.getElementById("comment")?.addEventListener("click", getcomment);
-function getcomment() {
+document.getElementById("comment").addEventListener("click", getcomment);
+
+async function getcomment() {
   $("#replycomment").removeAttr('style');
   const target = document.querySelector("#targertext").innerHTML;
   const strsplit = target.split(": ");
@@ -251,81 +252,164 @@ function getcomment() {
   const usernameUid = JSON.parse(user).uid;
   const username = JSON.parse(user).displayName;
 
-  document.querySelector('#datetimeshow').innerHTML = formatDate(new Date());
-  document.querySelector('.mr-2').innerHTML = username;
-  document.querySelector('.comment-text-sm').innerHTML = textinput;
+  const datetime = formatDate(new Date());
+  //document.querySelector('.comment-text-sm').innerHTML = textinput;
 
   //document.querySelector('#TextInputField').value;
   document.querySelector('#TextInputField').value = " ";
 
-  createFirestoreData(str, strsplit[1], textinput, username, usernameUid)
+const randomid = Math.floor(Math.random() * 100000);
+
+  const newlist =
+  `<div id="${randomid}">` +
+    "<div class='d-flex flex-row align-items-center commented-user' >" +
+    "<h5 class='mr-2' id='username'>" +
+    username + "</h5>" +
+    "<p id='datetimeshow'>" +
+    datetime + "</p>" +
+    "</div>" +
+    "<div class='comment-text-sm' id='Comment Sentence'>" + textinput + "</div>" +
+    "<div class='reply-section' >" +
+    "<div class='d-flex flex-row align-items-center voting-icons' id='replycomment' >" +
+    `<button class="btn btn-primary" id="buttonreply" type="button" onclick="replyspanhtml(this)" data-id="${randomid}" >Reply</button>` +
+    "<div class='d-flex flex-row add-comment-section mt-4 mb-4' id='replyandreply' style='visibility:hidden' >" +
+    `<input type='text' id='TextInputFieldUserPost-${randomid}' class='form-control mr-md-4' placeholder='Press Enter to reply' >` +
+    "</div>" +
+    "</div>" +
+    "</div>" +
+    "</div>";
+  $("#CommentCreate")[0].insertAdjacentHTML("afterbegin", newlist);
+
+  const replyDiv = document.createElement('div');
+  replyDiv.id = `ReplyDiv-${randomid}`;
+  replyDiv.style = "margin-left: 15%";
+  $(`#${randomid}`)[0].appendChild(replyDiv);
+
+
+  const docRef = await createFirestoreData(str, strsplit[1], textinput, username, usernameUid);
+  console.log(docRef.id);
+
+  const text = document.querySelector(`#TextInputFieldUserPost-${randomid}`);
+  text.addEventListener('keypress', (e) => getreplycomment(e, docRef));
+
   console.log("Create Finish")
+
 }
 
-document.getElementById("replybutton")?.addEventListener("click", replyspanhtml);
-function replyspanhtml() {
-
+//document.getElementById("buttonreply")?.addEventListener("click", replyspanhtml(e));
+function replyspanhtml(e) {
+  console.log(e);
+  const buttonid = $("#buttonreply").attr("data-id")
+  console.log(buttonid);
   $("#replyandreply").removeAttr('style');
-  console.log("work!")
+  $('#TextInputFieldUserPost').data('data-id', buttonid); //setter
 
+  console.log("work!")
 }
 
 // reply comment of user comment 
-document.getElementById("TextInputFieldUserPost")?.addEventListener('keypress', function getreplycomment(e) {
-  if (e.key === 'Enter') {
+async function getreplycomment(e, docRef) {
+  const buttonid = $("#buttonreply").attr("data-id")
+  console.log(buttonid);
+  $('#TextInputFieldUserPost').data('data-id', buttonid); //setter
+  console.log(e.keyCode);
+  if (e.keyCode === 13) {
+    console.log(e.key, "work")
     // when i click one time it span a class one time but information not access to it
-
-    // var card = document.createElement("div");
-    // card.setAttribute("class", "d-flex flex-row align-items-center voting-icons"); // list
-    // card.setAttribute("id", "replycommentpost");
-    // card.setAttribute("style", "margin-left: 13px;");
-    // document.querySelector("#CommentDiv").appendChild(card);
-
-    // var cardtitle = document.createElement("h5");
-    // cardtitle.setAttribute("class", "mr-2");
-    // cardtitle.setAttribute("id", "ReplyUsername");
-    // card.appendChild(cardtitle);
-    // var cardtitleDate = document.createElement("p");
-    // cardtitleDate.setAttribute("id", "Replydatetimeshow");
-    // card.appendChild(cardtitleDate);
-
-    // var cardbody = document.createElement("div");
-    // cardbody.setAttribute("class", "comment-text-sm");
-    // cardbody.setAttribute("id", "ReplyCommentShow");
-    // var cardbodycomment = document.createElement("p");
-    // cardbodycomment.setAttribute("id", "postcomment");
-    // cardbody.appendChild(cardbodycomment);
-    // document.querySelector("#CommentDiv").appendChild(cardbody);
-    // $("#replycommentpost").removeAttr('style');
-    const textinput = document.querySelector('#TextInputFieldUserPost').value;
+    const textinput = document.querySelector(`#TextInputFieldUserPost-${buttonid}`).value;
     const user = localStorage.getItem("googleUser");
     const username = JSON.parse(user).displayName;
     const datetime = formatDate(new Date());
-    //document.querySelector('#Replydatetimeshow').innerHTML = formatDate(new Date());
-    //document.querySelector('#ReplyUsername').innerHTML = username;
-    //document.querySelector('#postcomment').innerHTML = textinput;
 
-    document.querySelector('#TextInputFieldUserPost').value = " ";
+    var card = document.createElement("div");
+    card.setAttribute("class", "d-flex flex-row align-items-center voting-icons"); // list
+    card.setAttribute("id", "replycommentpost");
+    card.setAttribute("style", "margin-left: 13px;");
+    document.querySelector(`#ReplyDiv-${buttonid}`).appendChild(card);
+
+    var cardtitle = document.createElement("h5");
+    cardtitle.setAttribute("class", "mr-2");
+    cardtitle.setAttribute("id", "ReplyUsername");
+    card.appendChild(cardtitle);
+    var cardtitleDate = document.createElement("p");
+    cardtitleDate.setAttribute("id", "Replydatetimeshow");
+    card.appendChild(cardtitleDate);
+
+    var cardbody = document.createElement("div");
+    cardbody.setAttribute("class", "comment-text-sm");
+    cardbody.setAttribute("id", "ReplyCommentShow");
+    var cardbodycomment = document.createElement("p");
+    cardbodycomment.setAttribute("id", "postcomment");
+    cardbody.appendChild(cardbodycomment);
+    // document.querySelector(`#ReplyDiv-${buttonid}`).appendChild(cardbody);
+    $("#replycommentpost").removeAttr('style');
+
+    // cardbodycomment.innerHTML = textinput;
+    // cardtitleDate.innerHTML = datetime;
+    // cardtitle.innerHTML = username;
+
+    const replyDiv = document.getElementById(`ReplyDiv-${buttonid}`);
+    replyDiv.appendChild(cardtitle);
+    replyDiv.appendChild(cardtitleDate);
+    replyDiv.appendChild(cardbody);
+
+    const reply = {User: username, Date: datetime, Comment: textinput};
+
+    // set data
+    const docSnap = await getDoc(docRef);
+    const replies = docSnap.data().replies;
+    if (replies) {
+      replies.push(reply);
+      await updateDoc(docRef, { 
+        replies: replies
+      });
+    } else {
+      await updateDoc(docRef, { 
+        replies: [reply]
+      });
+    }
+    
+
+    document.querySelector(`#TextInputFieldUserPost-${buttonid}`).value = " ";
     console.log("work!")
 
-    const newlist =
-        "<div class='d-flex flex-row align-items-center voting-icons' id='replycommentpost'>" +
-              "<h5 class='mr-2' id='ReplyUsername'>" +
-              username + "</h5>" + 
-              "<p id='Replydatetimeshow'>" + 
-              datetime + "</p>" + 
-          "</div>" +
-            "<div class='comment-text-sm' id='ReplyCommentShow'>" +
-            "<p id='postcomment'>" +  textinput + 
-            "</p>" + 
-        "</div>"; 
-
-    $("#commentDiv")[0].insertAdjacentHTML("afterbegin", newlist);
-
-
+  
   }
-});
+};
+all()
+async function all() {
+  const randomid = Math.floor(Math.random() * 100000);
 
+  const buttonid = $("#buttonreply").attr("data-id")
+  console.log(buttonid);
+  const ref = doc(firestoreDB, "Comments", "quTbzWDZnMWtgpzJizpi")
+  const docSnap = await getDoc(ref);
+
+    const city = docSnap.data();
+    console.log(city);
+  const datetime =formatDate(new Date(city.datetime.seconds*1000)); //new Date(city.datetime.seconds*1000)
+    const newlist =
+    `<div id="${randomid}">` +
+      "<div class='d-flex flex-row align-items-center commented-user' >" +
+      "<h5 class='mr-2' id='username'>" +
+      city.username + "</h5>" +
+      "<p id='datetimeshow'>" +
+      datetime+ "</p>" +
+      "</div>" +
+      "<div class='comment-text-sm' id='Comment Sentence'>" + city.comment + "</div>" +
+      "<div class='reply-section' >" +
+      "<div class='d-flex flex-row align-items-center voting-icons' id='replycomment' >" +
+      `<button class="btn btn-primary" id="buttonreply" type="button" onclick="replyspanhtml(this)" data-id="${randomid}" >Reply</button>` +
+      "<div class='d-flex flex-row add-comment-section mt-4 mb-4' id='replyandreply' style='visibility:hidden' >" +
+      `<input type='text' id='TextInputFieldUserPost-${randomid}' class='form-control mr-md-4' placeholder='Press Enter to reply' >` +
+      "</div>" +
+      "</div>" +
+      "</div>" +
+      "</div>";
+    $("#CommentCreate")[0].insertAdjacentHTML("afterbegin", newlist);
+    
+
+}
 
 
 
@@ -335,8 +419,9 @@ async function createFirestoreData(textid, targetText, comment, username, userui
   console.log(textid, comment, username, useruid)
   // const citiesRef = collection(firestoreDB, "Comments");
 
-  await setDoc(doc(firestoreDB, "Comments", textid), {
+  const a = await addDoc(collection(firestoreDB, "Comments"), {
     useruid: useruid,
+    targettextid: textid,
     targettext: targetText,
     username: username,
     comment: comment,
@@ -344,6 +429,7 @@ async function createFirestoreData(textid, targetText, comment, username, userui
     datetime: new Date(),
   });
   console.log("create comments success");
+  return a;
 }
 // Read User Data
 async function readUserData(uid) {
@@ -381,5 +467,7 @@ async function readUserData(uid) {
 
 window.disliked = disliked;
 window.liked = liked;
+window.replyspanhtml = replyspanhtml;
+window.getreplycomment = getreplycomment;
 
 export { createFirestoreData, readUserData };
