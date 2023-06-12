@@ -1,4 +1,4 @@
-import { collection, setDoc ,onSnapshot, getDocs, updateDoc, getDoc, getFirestore, doc, query, where } from "https://www.gstatic.com/firebasejs/9.16.0/firebase-firestore.js";
+import { collection, setDoc, onSnapshot, getDocs, updateDoc, getDoc, getFirestore, doc, query, where } from "https://www.gstatic.com/firebasejs/9.16.0/firebase-firestore.js";
 
 import { app } from "/firebaseConfig.js";
 import { readFirestoreData } from "./crud.js";
@@ -78,7 +78,7 @@ export async function filterFirestoreDataUser(str) {
   document.querySelector("#originsentence").innerHTML += origin;
   document.getElementById('counterdislike').innerHTML = dislike;
   document.getElementById('counterlike').innerHTML = like;
-  
+
 }
 
 
@@ -243,7 +243,7 @@ function formatDate(date) {
 document.getElementById("comment")?.addEventListener("click", getcomment);
 function getcomment() {
   $("#replycomment").removeAttr('style');
-  const target = document.querySelector("#targertext").innerHTML;  
+  const target = document.querySelector("#targertext").innerHTML;
   const strsplit = target.split(": ");
 
   const textinput = document.querySelector('#TextInputField').value;
@@ -252,13 +252,13 @@ function getcomment() {
   const username = JSON.parse(user).displayName;
 
   document.querySelector('#datetimeshow').innerHTML = formatDate(new Date());
-  document.querySelector('.mr-2').innerHTML = username; 
+  document.querySelector('.mr-2').innerHTML = username;
   document.querySelector('.comment-text-sm').innerHTML = textinput;
 
   //document.querySelector('#TextInputField').value;
   document.querySelector('#TextInputField').value = " ";
 
-  createFirestoreData(str, strsplit[1] ,textinput, username ,usernameUid)
+  createFirestoreData(str, strsplit[1], textinput, username, usernameUid)
   console.log("Create Finish")
 }
 
@@ -270,63 +270,72 @@ function replyspanhtml() {
 
 }
 
-$('#input-id').on("keyup", function(e) {
-  if (e.keyCode == 13) {
-      console.log('Enter');
-  }
-});
-
 // reply comment of user comment 
 document.getElementById("TextInputFieldUserPost")?.addEventListener('keypress', function getreplycomment(e) {
-  if (e.key === 'Enter') { 
+  if (e.key === 'Enter') {
     // when i click one time it span a class one time but information not access to it
 
-    var card = document.createElement("div"); 
-    card.setAttribute("class", "d-flex flex-row align-items-center voting-icons"); // list
-    card.setAttribute("id", "replycommentpost");
-    card.setAttribute("style", "margin-left: 13px;");
-    document.querySelector("#CommentDiv").appendChild(card); 
+    // var card = document.createElement("div");
+    // card.setAttribute("class", "d-flex flex-row align-items-center voting-icons"); // list
+    // card.setAttribute("id", "replycommentpost");
+    // card.setAttribute("style", "margin-left: 13px;");
+    // document.querySelector("#CommentDiv").appendChild(card);
 
-    var cardtitle = document.createElement("h5"); 
-    cardtitle.setAttribute("class", "mr-2");
-    cardtitle.setAttribute("id", "ReplyUsername");
-    card.appendChild(cardtitle);
-    var cardtitleDate = document.createElement("p"); 
-    cardtitleDate.setAttribute("id", "Replydatetimeshow"); 
-    card.appendChild(cardtitleDate);
+    // var cardtitle = document.createElement("h5");
+    // cardtitle.setAttribute("class", "mr-2");
+    // cardtitle.setAttribute("id", "ReplyUsername");
+    // card.appendChild(cardtitle);
+    // var cardtitleDate = document.createElement("p");
+    // cardtitleDate.setAttribute("id", "Replydatetimeshow");
+    // card.appendChild(cardtitleDate);
 
-    var cardbody = document.createElement("div"); 
-    cardbody.setAttribute("class", "comment-text-sm");
-    cardbody.setAttribute("id", "ReplyCommentShow");
-    var cardbodycomment = document.createElement("p"); 
-    cardbodycomment.setAttribute("id", "postcomment"); 
-    cardbody.appendChild(cardbodycomment);
-    document.querySelector("#CommentDiv").appendChild(cardbody); 
-       
-  $("#replycommentpost").removeAttr('style');
-  const textinput = document.querySelector('#TextInputFieldUserPost').value;
-  const user = localStorage.getItem("googleUser");
-  const username = JSON.parse(user).displayName;
-  
-  document.querySelector('#Replydatetimeshow').innerHTML = formatDate(new Date());
-  document.querySelector('#ReplyUsername').innerHTML = username; 
-  document.querySelector('#postcomment').innerHTML = textinput;
+    // var cardbody = document.createElement("div");
+    // cardbody.setAttribute("class", "comment-text-sm");
+    // cardbody.setAttribute("id", "ReplyCommentShow");
+    // var cardbodycomment = document.createElement("p");
+    // cardbodycomment.setAttribute("id", "postcomment");
+    // cardbody.appendChild(cardbodycomment);
+    // document.querySelector("#CommentDiv").appendChild(cardbody);
+    // $("#replycommentpost").removeAttr('style');
+    const textinput = document.querySelector('#TextInputFieldUserPost').value;
+    const user = localStorage.getItem("googleUser");
+    const username = JSON.parse(user).displayName;
+    const datetime = formatDate(new Date());
+    //document.querySelector('#Replydatetimeshow').innerHTML = formatDate(new Date());
+    //document.querySelector('#ReplyUsername').innerHTML = username;
+    //document.querySelector('#postcomment').innerHTML = textinput;
+
+    document.querySelector('#TextInputFieldUserPost').value = " ";
+    console.log("work!")
+
+    const newlist =
+        "<div class='d-flex flex-row align-items-center voting-icons' id='replycommentpost'>" +
+              "<h5 class='mr-2' id='ReplyUsername'>" +
+              username + "</h5>" + 
+              "<p id='Replydatetimeshow'>" + 
+              datetime + "</p>" + 
+          "</div>" +
+            "<div class='comment-text-sm' id='ReplyCommentShow'>" +
+            "<p id='postcomment'>" +  textinput + 
+            "</p>" + 
+        "</div>"; 
+
+    $("#commentDiv")[0].insertAdjacentHTML("afterbegin", newlist);
 
 
-  document.querySelector('#TextInputFieldUserPost').value = " ";
-  console.log("work!")
-    
- 
   }
 });
+
+
+
 
 
 // Create Data
-async function createFirestoreData(textid ,targetText, comment , username, useruid) {
-  console.log(textid, comment , username, useruid)
+async function createFirestoreData(textid, targetText, comment, username, useruid) {
+  console.log(textid, comment, username, useruid)
   // const citiesRef = collection(firestoreDB, "Comments");
 
-  await setDoc(doc(firestoreDB, "Comments" , textid), {
+  await setDoc(doc(firestoreDB, "Comments", textid), {
     useruid: useruid,
     targettext: targetText,
     username: username,
@@ -347,12 +356,12 @@ async function readUserData(uid) {
   console.log("All firestore order by username how many document filter out: " + querySnapshot.size);
   document.querySelector("#listgroup").innerHTML = "";
   querySnapshot.forEach((doc) => {
- 
+
     const target = `${doc.data().targetText}`;
     const videotime = `${doc.data().videotimestamp}`;
     const videoEP = `${doc.data().video}`;
-   
-    var card = document.createElement("li"); 
+
+    var card = document.createElement("li");
     card.setAttribute("class", "list-group-item"); // list
     card.setAttribute("id", "list-Item");
     card.setAttribute("style", "max-width: 70rem;");
@@ -360,16 +369,15 @@ async function readUserData(uid) {
     card.innerHTML = "TargetText: " + target;
 
     var videotimestamp = document.createElement("p");
-    videotimestamp.innerHTML = "Collocations exist on video "+ videoEP + " time is: " + videotime;
-    card.appendChild(videotimestamp); 
-    
+    videotimestamp.innerHTML = "Collocations exist on video " + videoEP + " time is: " + videotime;
+    card.appendChild(videotimestamp);
+
     // card.addEventListener("click", () => {
     //   window.location.assign("Comments.html" + "?targetTextId=" + doc.id);
     // });
     // card.classList.add("text");
   });
 }
-
 
 window.disliked = disliked;
 window.liked = liked;
